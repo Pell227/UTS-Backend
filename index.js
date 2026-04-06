@@ -7,6 +7,7 @@ const app = http.createServer(router);
 app.listen(port);
 console.log(`Server running on port number: ${port}`);
 
+console.log("Hello World!");
 
 app.get("/", (req, res));
 res.send("Kelompok 2");
