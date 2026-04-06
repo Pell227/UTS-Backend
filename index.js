@@ -4,9 +4,11 @@ const router = require("./router");
 const port = 3200;
 const app = http.createServer(router);
 
+
 app.listen(port);
 console.log(`Server running on port number: ${port}`);
 
+console.log("Helo");
 
 app.get("/", (req, res));
 res.send("Kelompok 2");
