@@ -32,6 +32,33 @@ app.get("/api/products", (req, res) => {
   res.json(products);
 });
 
+app.get("/api/products/test", (req, res) => {
+  res.json({
+    message: "GET tambahan berhasil",
+  });
+});
+
+app.post("/api/products", (req, res) => {
+  let body = "";
+
+  req.on("data", (chunk) => {
+    body += chunk.toString();
+  });
+
+  req.on("end", () => {
+    const data = JSON.parse(body);
+
+    const newProduct = {
+      id: Date.now(),
+      name: data.name,
+      price: data.price,
+    };
+
+    res.writeHead(201, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(newProduct));
+  });
+});
+
 app.put("/api/products/:id", (req, res) => {
   const productId = req.params.id;
   res.json({ message: `Product ${productId} updated successfully` });
