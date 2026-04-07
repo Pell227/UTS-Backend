@@ -43,7 +43,8 @@ app.get("/api/payment-methods", (req, res) => {
     {id : 3, name : "Gopay", type : "e-Wallet"},
     {id : 4, name : "Mandiri", type : "Bank"},
     {id : 5, name : "BCA", type : "Bank"},
-    {id : 6, name : "BRI", type : "Bank"}
+    {id : 6, name : "BRI", type : "Bank"},
+    {id : 7, name : "Uang tunai", type : "Cash"}
   ]);
 });
 
