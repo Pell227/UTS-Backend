@@ -8,11 +8,57 @@ const app = http.createServer(router);
 app.listen(port);
 console.log(`Server running on port number: ${port}`);
 
-console.log("Helo");
+//Endpoint untuk point of sales
 
-app.get("/", (req, res));
-res.send("Kelompok 2");
 
+//Felisia - Staff
+app.get("/api/staff", (req, res) => {
+  const staff = [
+    { id: 1, name: "Pasep", role: "Cashier" },
+    { id: 2, name: "Aldo", role: "Manager" },
+    { id: 3, name: "stella", role: "Staff" },
+  ];
+  res.json(staff);
+});
+
+app.post("/api/staff", (req, res) => {
+  const { name, role } = req.body;
+  const newStaff = {
+    id: Date.now(),
+    name,
+    role,
+  };
+  res.status(201).json({
+    message: "Staff created successfully",
+    data: newStaff,
+  });
+});
+
+app.post("/api/staff/:id", (req, res) => {
+  const staffId = req.params.id;
+  res.json({ message: `Staff ${staffId} updated successfully` });
+});
+
+app.patch("/api/staff/:id/status", (req, res) => {
+  const staffId = req.params.id;
+  const { isActive } = req.body;
+  res.json({
+    message: `Staff ${staffId} status updated successfully`,
+    isActive,
+  });
+});
+
+app.delete("/api/staff/:id", (req, res) => {
+  const staffId = req.params.id;
+  res.json({ message: `Staff ${staffId} deleted successfully` });
+});
+
+app.get("/api/staff/me", (req, res) => {
+  const currentStaff = { id: 1, name: "Pasep", role: "Cashier" };
+  res.json(currentStaff);
+});
+
+//
 app.get("/api/products/:id", (req, res) => {
   const productId = req.params.id;
   const product = {
@@ -63,10 +109,95 @@ app.put("/api/products/:id", (req, res) => {
   const productId = req.params.id;
   res.json({ message: `Product ${productId} updated successfully` });
 });
-// part mongodb
-const mongoose = require("mongoose");
 
-const connectionString =
-  "mongodb://<USN>:<PASSWORD>@ac-hpzj89u-shard-00-00.dturini.mongodb.net:27017,ac-hpzj89u-shard-00-01.dturini.mongodb.net:27017,ac-hpzj89u-shard-00-02.dturini.mongodb.net:27017/?ssl=true&replicaSet=atlas-104wvz-shard-0&authSource=admin&appName=Cluster0";
+//Felisia - Resport Analytics
 
-mongoose.connect(connectionString)
+app.get("get/api/daily-sales", (req, res) => {
+  const dailySales = [
+    { date: "2024-01-01", totalSales: 1000 },
+    { date: "2024-01-02", totalSales: 1500 },
+    { date: "2024-01-03", totalSales: 2000 },
+  ];
+  res.json(dailySales);
+});
+
+app.get("api/reports/prodcuts/top-products", (req, res) => {
+  const topProducts = [
+    { id: 1, name: "Dove", sales: 500 },
+    { id: 2, name: "Sensoden", sales: 300 },
+    { id: 3, name: "ponds", sales: 200 },
+  ];
+  res.json(topProducts);
+});
+
+app.get("api/reports/products/low-stock", (req, res) => {
+  const lowStockProducts = [
+    { id: 2, name: "Sensoden", stock: 5 },
+    { id: 1, name: "Dove", stock: 3 },
+    { id: 3, name: "ponds", stock: 2 },
+  ];
+  res.json(lowStockProducts);
+});
+
+app.get("api/reports/staff/top-staff", (req, res) => {
+  const topStaff = [
+    { id: 1, name: "Pasep", sales: 1000 },
+    { id: 2, name: "Aldo", sales: 800 },
+    { id: 3, name: "Stella", sales: 600 },
+  ];
+  res.json(topStaff);
+});
+
+//Azzarqy - Metode Pembayaran
+app.get("/api/payment-methods", (req, res) => {
+  res.json([
+    { id: 1, name: "Ovo", type: "e-Wallet" },
+    { id: 2, name: "Dana", type: "e-Wallet" },
+    { id: 3, name: "Gopay", type: "e-Wallet" },
+    { id: 4, name: "Mandiri", type: "Bank" },
+    { id: 5, name: "BCA", type: "Bank" },
+    { id: 6, name: "BRI", type: "Bank" },
+    { id: 7, name: "Uang tunai", type: "Cash" },
+  ]);
+});
+
+app.put("/api/payment-methods", (req, res) => {
+  const { name, type } = req.body;
+  const newData = {
+    id: Date.now(),
+    name,
+    type,
+  };
+
+  res.status(201).json({
+    message: "Payment method created",
+    data: newData,
+  });
+});
+
+app.put("/api/payment/methods/:id", (req, res) => {
+  const id = req.params.id;
+
+  res.json({
+    message: `Payment method ${id} updated`,
+    data: req.body,
+  });
+});
+
+app.delete("/api/payment-methods/:id", (res, req) => {
+  const id = req.params.id;
+
+  res.json({
+    message: `Payment method ${id} deleted`,
+  });
+});
+
+app.patch("/api/payment-methods/:id/status", (req, res) => {
+  const id = req.params.id;
+  const { isActive } = req.body;
+
+  res.json({
+    message: `Status Payment method ${id} updated`,
+    isActive,
+  });
+});
