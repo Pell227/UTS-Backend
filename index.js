@@ -4,10 +4,12 @@ const router = require("./router");
 const port = 3200;
 const app = http.createServer(router);
 
+
 app.listen(port);
 console.log(`Server running on port number: ${port}`);
 
 //Endpoint untuk point of sales
+
 
 //Felisia - Staff
 app.get("/api/staff", (req, res) => {
@@ -74,6 +76,33 @@ app.get("/api/products", (req, res) => {
     { id: 3, name: "Product 3", price: 30 },
   ];
   res.json(products);
+});
+
+app.get("/api/products/test", (req, res) => {
+  res.json({
+    message: "GET tambahan berhasil",
+  });
+});
+
+app.post("/api/products", (req, res) => {
+  let body = "";
+
+  req.on("data", (chunk) => {
+    body += chunk.toString();
+  });
+
+  req.on("end", () => {
+    const data = JSON.parse(body);
+
+    const newProduct = {
+      id: Date.now(),
+      name: data.name,
+      price: data.price,
+    };
+
+    res.writeHead(201, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(newProduct));
+  });
 });
 
 app.put("/api/products/:id", (req, res) => {
