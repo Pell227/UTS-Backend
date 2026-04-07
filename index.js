@@ -71,9 +71,15 @@ app.get("/api/products/:id", (req, res) => {
 
 app.get("/api/products", (req, res) => {
   const products = [
-    { id: 1, name: "Product 1", price: 10 },
-    { id: 2, name: "Product 2", price: 20 },
-    { id: 3, name: "Product 3", price: 30 },
+    { id: 1, name: "Apple", price: 10 },
+    { id: 1, name: "Grape", price: 10 },
+    { id: 1, name: "Lychee", price: 10 },
+    { id: 2, name: "Cabbage", price: 20 },
+    { id: 2, name: "Spinach", price: 20 },
+    { id: 2, name: "Cucumber", price: 20 },
+    { id: 3, name: "Milk", price: 30 },
+    { id: 3, name: "Chocolate", price: 30 },
+    { id: 3, name: "Yoghurt", price: 30 },
   ];
   res.json(products);
 });
@@ -121,7 +127,7 @@ app.get("get/api/daily-sales", (req, res) => {
   res.json(dailySales);
 });
 
-app.get("api/reports/prodcuts/top-products", (req, res) => {
+app.get("api/reports/products/top-products", (req, res) => {
   const topProducts = [
     { id: 1, name: "Dove", sales: 500 },
     { id: 2, name: "Sensoden", sales: 300 },
@@ -200,4 +206,19 @@ app.patch("/api/payment-methods/:id/status", (req, res) => {
     message: `Status Payment method ${id} updated`,
     isActive,
   });
+});
+
+//Tristan CATEGORIES
+app.post("/api/categories", (req, res) => {
+  const categories = req.params.id;
+  res.json({ message: `Categories ${categories} updated succesfully`});
+});
+
+app.get("/api/categories", (req, res) => {
+  const categories = [
+    {id: 1, name: "Fruit", type: "fruit" },
+    {id: 2, name: "Vegetables", type: "vege" },
+    {id: 3, name: "Dairy Products", type: "dairy" }
+    ];
+    res.json(categories);
 });
