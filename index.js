@@ -167,7 +167,6 @@ app.delete("/api/products/:id", (req, res) => {
 
 // part mongodb
 const mongoose = require("mongoose");
->>>>>>> d7a0aa6 (Nambah get buat ambil produk sesuai id, put buat update produk, ama delete buat hapus produk)
 
 //Felisia - Resport Analytics
 
