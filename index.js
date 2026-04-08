@@ -222,3 +222,8 @@ app.get("/api/categories", (req, res) => {
     ];
     res.json(categories);
 });
+
+app.get("/api/categories/:id", (req,res) => {
+  const kategoryId = req.params.id;
+  res.json({ message: `Product ${productId} updated successfully` });
+})
