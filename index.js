@@ -1,62 +1,17 @@
 const http = require("http");
+const fs = require("fs");
+
+const path = require("path");
+const mongoose = require("mongoose");
+
 const router = require("./router");
 
-const port = 3200;
 const app = http.createServer(router);
-
 
 app.listen(port);
 console.log(`Server running on port number: ${port}`);
 
 //Endpoint untuk point of sales
-
-
-//Felisia - Staff
-app.get("/api/staff", (req, res) => {
-  const staff = [
-    { id: 1, name: "Pasep", role: "Cashier" },
-    { id: 2, name: "Aldo", role: "Manager" },
-    { id: 3, name: "stella", role: "Staff" },
-  ];
-  res.json(staff);
-});
-
-app.post("/api/staff", (req, res) => {
-  const { name, role } = req.body;
-  const newStaff = {
-    id: Date.now(),
-    name,
-    role,
-  };
-  res.status(201).json({
-    message: "Staff created successfully",
-    data: newStaff,
-  });
-});
-
-app.post("/api/staff/:id", (req, res) => {
-  const staffId = req.params.id;
-  res.json({ message: `Staff ${staffId} updated successfully` });
-});
-
-app.patch("/api/staff/:id/status", (req, res) => {
-  const staffId = req.params.id;
-  const { isActive } = req.body;
-  res.json({
-    message: `Staff ${staffId} status updated successfully`,
-    isActive,
-  });
-});
-
-app.delete("/api/staff/:id", (req, res) => {
-  const staffId = req.params.id;
-  res.json({ message: `Staff ${staffId} deleted successfully` });
-});
-
-app.get("/api/staff/me", (req, res) => {
-  const currentStaff = { id: 1, name: "Pasep", role: "Cashier" };
-  res.json(currentStaff);
-});
 
 //
 app.get("/api/products/:id", (req, res) => {
@@ -81,7 +36,7 @@ app.get("/api/products", (req, res) => {
     { id: 3, name: "Chocolate", price: 30 },
     { id: 3, name: "Yoghurt", price: 30 },
   ];
-  const product = products.find(p => p.id === productId);
+  const product = products.find((p) => p.id === productId);
 
   if (product) {
     res.writeHead(200, { "Content-Type": "application/json" });
@@ -246,19 +201,19 @@ app.patch("/api/payment-methods/:id/status", (req, res) => {
 //Tristan CATEGORIES
 app.post("/api/categories", (req, res) => {
   const categories = req.params.id;
-  res.json({ message: `Categories ${categories} updated succesfully`});
+  res.json({ message: `Categories ${categories} updated succesfully` });
 });
 
 app.get("/api/categories", (req, res) => {
   const categories = [
-    {id: 1, name: "Fruit", type: "fruit" },
-    {id: 2, name: "Vegetables", type: "vege" },
-    {id: 3, name: "Dairy Products", type: "dairy" }
-    ];
-    res.json(categories);
+    { id: 1, name: "Fruit", type: "fruit" },
+    { id: 2, name: "Vegetables", type: "vege" },
+    { id: 3, name: "Dairy Products", type: "dairy" },
+  ];
+  res.json(categories);
 });
 
-app.get("/api/categories/:id", (req,res) => {
+app.get("/api/categories/:id", (req, res) => {
   const kategoryId = req.params.id;
   res.json({ message: `Product ${productId} updated successfully` });
-})
+});
