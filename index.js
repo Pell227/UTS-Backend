@@ -81,7 +81,42 @@ app.get("/api/products", (req, res) => {
     { id: 3, name: "Chocolate", price: 30 },
     { id: 3, name: "Yoghurt", price: 30 },
   ];
-  res.json(products);
+  const product = products.find(p => p.id === productId);
+
+  if (product) {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(product));
+  } else {
+    res.writeHead(404, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ message: "Product not found" }));
+  }
+});
+
+app.get("/api/products/test", (req, res) => {
+  res.json({
+    message: "GET tambahan berhasil",
+  });
+});
+
+app.post("/api/products", (req, res) => {
+  let body = "";
+
+  req.on("data", (chunk) => {
+    body += chunk.toString();
+  });
+
+  req.on("end", () => {
+    const data = JSON.parse(body);
+
+    const newProduct = {
+      id: Date.now(),
+      name: data.name,
+      price: data.price,
+    };
+
+    res.writeHead(201, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(newProduct));
+  });
 });
 
 app.get("/api/products/test", (req, res) => {
