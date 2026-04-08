@@ -8,6 +8,9 @@ const app = http.createServer(router);
 app.listen(port);
 console.log(`Server running on port number: ${port}`);
 
+//Endpoint untuk point of sales
+
+
 //Felisia - Staff
 app.get("/api/staff", (req, res) => {
   const staff = [
@@ -36,120 +39,26 @@ app.post("/api/staff/:id", (req, res) => {
   res.json({ message: `Staff ${staffId} updated successfully` });
 });
 
-// Bagian login 
-const JWT_SECRET = process.env.JWT_SECRET || "rahasia_jwt_kasir";
-const users = [];
-
-app.post("/api/auth/register", (req, res) => {
-  try{
-    const { username, email, password } = req.body;
-
-    if (!username || !email || !password) {
-      return res.status (400).json ({
-        success: false,
-        massage: "Username, email, dan password wajib di isi",
-      });
-    }
-    // untuk mengecek jika email sudah terdaftar atau belum
-    const existingUser = users.find((u) => u.email == email);
-    if (existingUser) {
-      return res.status(409).json({
-        success: false,
-        message: "Email sudah terdaftar",
-      });
-    }
-
-    const saltRound = 10;
-    const hashedPassword =  bcrypt.hash(password, saltRound);
-
-    const sewUser = {
-      id: users.lenght + 1,
-      username,
-      email,
-      password: hashedPassword,
-      created: new Date(),
-    };
-    users.push(newUser);
-
-
-    return res.status(201).json ({
-      success: true,
-      message: "Resgistrasi Berhasil",
-      data: {
-        id: newUser.id,
-        username: newUser.username,
-        email:newUser.email,
-      },
-    });
-  } catch (error) {
-    console.error("Register error:, error ");
-    return res.status(500).json({
-      success:false,
-      message: "Terjadi kesalahan pada server",
-    });
-  }
+app.patch("/api/staff/:id/status", (req, res) => {
+  const staffId = req.params.id;
+  const { isActive } = req.body;
+  res.json({
+    message: `Staff ${staffId} status updated successfully`,
+    isActive,
+  });
 });
 
-// auth regis
-app.get("/api/auth/register"), (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Email dan password wajib diisi",
-      });
-    }
-
-    const User = users.find((u) => u.email == email);
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "Email atau password salah",
-      });
-    }
-
-    const isPasswordvalid =  bcrypt.compare(password, user.password);
-    if(!isPasswordValid) {
-      return res.status(401).json({
-        success: false,
-        message: "Email atau password salah",
-      });
-    }
-    // JWT adalah mekanisme autentikasi berbasis token
-    const token = jwt.sign(
-    {
-      id: user.id, 
-      email: user.email,
-      username: user.username,
-    }, JWT_SECRET,
-    { expiresIn: "1h"}
-  );
-
-  return res.status(200).json({
-    seccess: true,
-    message: "login berhasil",
-    data: {
-      token,
-    user: { 
-    id: user.id,
-      username: user.username,
-      email: user.email,
-    },
-  },
+app.delete("/api/staff/:id", (req, res) => {
+  const staffId = req.params.id;
+  res.json({ message: `Staff ${staffId} deleted successfully` });
 });
 
-  } catch (error) {
-    console.error("Login error: ", error);
-    return res.status(500).json({
-      success: false,
-      message: "Terjadi kesalahan pada server",
-    });
-  }
-}
+app.get("/api/staff/me", (req, res) => {
+  const currentStaff = { id: 1, name: "Pasep", role: "Cashier" };
+  res.json(currentStaff);
+});
 
+//
 app.get("/api/products/:id", (req, res) => {
   const productId = req.params.id;
   const product = {
@@ -171,16 +80,6 @@ app.get("/api/products", (req, res) => {
     { id: 3, name: "Milk", price: 30 },
     { id: 3, name: "Chocolate", price: 30 },
     { id: 3, name: "Yoghurt", price: 30 },
-  ];
-  res.json(products);
-});
-
-app.get("/api/products/:id", (req, res) => {
-  const productId = parseInt(req.params.id);
-  const products = [
-    { id: 1, name: "Product 1", price: 10 },
-    { id: 2, name: "Product 2", price: 20 },
-    { id: 3, name: "Product 3", price: 30 },
   ];
   const product = products.find(p => p.id === productId);
 
@@ -220,108 +119,37 @@ app.post("/api/products", (req, res) => {
   });
 });
 
+app.get("/api/products/test", (req, res) => {
+  res.json({
+    message: "GET tambahan berhasil",
+  });
+});
+
+app.post("/api/products", (req, res) => {
+  let body = "";
+
+  req.on("data", (chunk) => {
+    body += chunk.toString();
+  });
+
+  req.on("end", () => {
+    const data = JSON.parse(body);
+
+    const newProduct = {
+      id: Date.now(),
+      name: data.name,
+      price: data.price,
+    };
+
+    res.writeHead(201, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(newProduct));
+  });
+});
+
 app.put("/api/products/:id", (req, res) => {
   const productId = req.params.id;
   res.json({ message: `Product ${productId} updated successfully` });
 });
-
-//will-Transactions
-
-let transactions = [];
-let detail = [];
-
-app.post("/api/transactions", (req, res) => {
-  const { amount, type, description } = req.body;
-   if (!amount || !type) 
-  {
-    return res.status(400).json({ error: "amount and type are required" });
-  }
-
-  const newTransaction= { 
-    tanggal: new Date(),
-    id: Date.now().toString(), amount,
-    type,
-    description: description || "",
-    harga: 0,
-    subtotal: 0,
-    total: 0,
-    bayar: 0, 
-    Kembalian: 0,
-  };
-  transactions.push(newTransaction);
-  res.status(201).json(newTransaction);
-});
-
-app.get("/api/transactions", (req, res) => {
-  res.json(transactions);
-});
-
-app.post("/api/transactions/:id", (req, res) => {
-  const { id } = req.params;
-  const {id_produk, jumlah} = req.body;
-
-  const transaction = transactions.find(t => t.id == id);
-  if (!transaction) 
-  {
-    return res.status(404).json({ error: "Transaction not found" });
-  }
-  const product = products.find(p => p.id == id_produk);
-  if (!product) 
-  {
-    return res.status(404).json({ error: "Product not found" });
-  }
-  if (product.stock < jumlah) 
-  {
-    return res.status(400).json({ error: "not enough stock" });
-  }
-
-  const subtotal = product.harga * jumlah;
-
-  const detail = {
-    id_produk,
-    jumlah,
-    harga: product.price,
-    subtotal,
-  };
-
-  push(detail);
-  res.json(detail);
-});
-
-app.delete("/api/transactions", (req, res) => {
-  transactions = [];
-  res.status(204).send();
-});
-
-app.delete("/api/transactions/:id", (req, res) => {
-  const transaction = findTransaction(req.params.id);
-
-  if (!transaction) 
-    return res.status(404).json({ error: "Not found" });
-
-  transaction.deleted_at = new Date();
-
-  res.status(204).send();
-});
-
-app.get("/api/transactions/:id/total", (req, res) => {
-  const { id } = req.params;
-
-  const transaction = transactions.find(t => t.id == id);
-  
-  if (!transaction) 
-  {
-    return res.status(404).json({ error: "Transaction not found" });
-  }
-
-  const total = transaction.details.reduce((sum, detail) => sum + detail.subtotal, 0);
-  
-  res.json({ total });
-});
-
-
-// part mongodb
-const mongoose = require("mongoose");
 
 //Felisia - Resport Analytics
 
@@ -429,3 +257,8 @@ app.get("/api/categories", (req, res) => {
     ];
     res.json(categories);
 });
+
+app.get("/api/categories/:id", (req,res) => {
+  const kategoryId = req.params.id;
+  res.json({ message: `Product ${productId} updated successfully` });
+})
