@@ -84,6 +84,24 @@ app.get("/api/products", (req, res) => {
   res.json(products);
 });
 
+app.get("/api/products/:id", (req, res) => {
+  const productId = parseInt(req.params.id);
+  const products = [
+    { id: 1, name: "Product 1", price: 10 },
+    { id: 2, name: "Product 2", price: 20 },
+    { id: 3, name: "Product 3", price: 30 },
+  ];
+  const product = products.find(p => p.id === productId);
+
+  if (product) {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(product));
+  } else {
+    res.writeHead(404, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ message: "Product not found" }));
+  }
+});
+
 app.get("/api/products/test", (req, res) => {
   res.json({
     message: "GET tambahan berhasil",
@@ -115,6 +133,46 @@ app.put("/api/products/:id", (req, res) => {
   const productId = req.params.id;
   res.json({ message: `Product ${productId} updated successfully` });
 });
+
+app.put("/api/products/:id", (req, res) => {
+  const productId = parseInt(req.params.id);
+  let body = "";
+  req.on("data", chunk => body += chunk.toString());
+  req.on("end", () => {
+    const data = JSON.parse(body);
+    const updatedProduct = {
+      id: productId,
+      name: data.name || `Product ${productId}`,
+      price: data.price || 0
+    };
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ message: "Product updated", product: updatedProduct }));
+  });
+});
+
+app.delete("/api/products/:id", (req, res) => {
+  const productId = parseInt(req.params.id);
+
+  // dummy data sementara
+  const products = [
+    { id: 1, name: "Product 1", price: 10 },
+    { id: 2, name: "Product 2", price: 20 },
+    { id: 3, name: "Product 3", price: 30 },
+  ];
+
+  const product = products.find(p => p.id === productId);
+
+  if (product) {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ message: `Product ${productId} deleted successfully` }));
+  } else {
+    res.writeHead(404, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ message: "Product not found" }));
+  }
+});
+
+// part mongodb
+const mongoose = require("mongoose");
 
 //Felisia - Resport Analytics
 
