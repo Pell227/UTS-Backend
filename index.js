@@ -4,8 +4,6 @@ const fs = require("fs");
 const path = require("path");
 const mongoose = require("mongoose");
 
-const router = require("./router");
-
 const app = http.createServer(router);
 
 app.listen(port);
