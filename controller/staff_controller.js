@@ -1,6 +1,5 @@
 const Staff = require("../models/staff_model");
 
-// Get all staff
 const getAllStaff = async (req, res) => {
   try {
     const staff = await Staff.find();
@@ -10,7 +9,6 @@ const getAllStaff = async (req, res) => {
   }
 };
 
-// Get staff by ID
 const getStaffById = async (req, res) => {
   try {
     const staff = await Staff.findById(req.params.id);
@@ -21,7 +19,6 @@ const getStaffById = async (req, res) => {
   }
 };
 
-// Create new staff
 const createStaff = async (req, res) => {
   const staff = new Staff(req.body);
   try {
@@ -32,7 +29,6 @@ const createStaff = async (req, res) => {
   }
 };
 
-// Update staff
 const updateStaff = async (req, res) => {
   try {
     const staff = await Staff.findByIdAndUpdate(req.params.id, req.body, {
