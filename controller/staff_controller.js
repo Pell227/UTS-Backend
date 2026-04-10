@@ -40,7 +40,6 @@ const updateStaff = async (req, res) => {
   }
 };
 
-// Delete staff
 const deleteStaff = async (req, res) => {
   try {
     await Staff.findByIdAndDelete(req.params.id);
