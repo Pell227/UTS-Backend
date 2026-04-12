@@ -2,7 +2,7 @@ const express = require("express");
 
 const staff = require("./routes/staff_routes");
 
-module.exports = (app) => {
+module.exports = () => {
   const app = express.Router();
 
   staff(app);
