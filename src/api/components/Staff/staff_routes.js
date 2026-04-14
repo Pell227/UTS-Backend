@@ -1,6 +1,6 @@
 const express = require("express");
 
-const staffcontroller = require("../controllers/staff_controller");
+const staffcontroller = require("./staff_controller");
 
 const router = express.Router();
 
@@ -11,5 +11,5 @@ module.exports = (app) => {
   router.get("/:id", staffcontroller.getStaffById);
   router.post("/", staffcontroller.createStaff);
   router.put("/:id", staffcontroller.updateStaff);
-  router.delete("/:id", staffcontroller.deleteStaff); 
+  router.delete("/:id", staffcontroller.deleteStaff);
 };
