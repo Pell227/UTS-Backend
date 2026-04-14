@@ -1,4 +1,4 @@
-const Staff = require("../models/staff_model");
+const staffservice = require("./staff_service");
 
 const getAllStaff = async (req, res) => {
   try {
