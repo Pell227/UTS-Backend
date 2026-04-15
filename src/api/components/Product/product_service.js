@@ -1,6 +1,4 @@
-// services/product.service.js
 module.exports = (productRepository) => {
-
   const getProducts = async () => {
     return await productRepository.getAll();
   };

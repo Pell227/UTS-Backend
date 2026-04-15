@@ -18,5 +18,6 @@ async function getTransactionById(id) {
 
 module.exports = {
     getAllTransactions,
-    getTransactionById
+    getTransactionById,
+    createTransaction
 };

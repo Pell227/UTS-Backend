@@ -1,5 +1,5 @@
 const express = require("express");
-const staffcontroller = require("./staff_controller");
+const staffcontroller = require("src/api/components/Staff/staff_controller");
 const router = express.Router();
 
 module.exports = (app) => {
