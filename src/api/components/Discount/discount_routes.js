@@ -1,17 +1,17 @@
 const express = require("express");
-const promoController = require("../controllers/promo_controller");
+const controller = require("../controllers/promo_controller");
 
 const router = express.Router();
 
 module.exports = (app) => {
   app.use("/api/promos", router);
 
-  router.get("/", promoController.getPromos);
-  router.get("/:id", promoController.getPromoById);
-  router.post("/", promoController.createPromo);
-  router.put("/:id", promoController.updatePromo);
-  router.delete("/:id", promoController.deletePromo);
+  router.get("/", controller.getPromos);
+  router.get("/:id", controller.getPromoById);
+  router.post("/", controller.createPromo);
+  router.put("/:id", controller.updatePromo);
+  router.delete("/:id", controller.deletePromo);
 
-  // BONUS
-  router.post("/apply", promoController.applyPromo);
+  // 🔥 BONUS ENDPOINT
+  router.post("/apply", controller.applyPromo);
 };

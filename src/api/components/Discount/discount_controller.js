@@ -1,9 +1,9 @@
-const repo = require("../repository/promo_repository");
+const service = require("../services/promo_service");
 
 // GET ALL
 const getPromos = async (req, res) => {
   try {
-    const data = await repo.getPromos();
+    const data = await service.getPromos();
     res.json(data);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -13,7 +13,7 @@ const getPromos = async (req, res) => {
 // GET BY ID
 const getPromoById = async (req, res) => {
   try {
-    const data = await repo.getPromoById(req.params.id);
+    const data = await service.getPromoById(req.params.id);
 
     if (!data) {
       return res.status(404).json({ message: "Promo not found" });
@@ -28,22 +28,7 @@ const getPromoById = async (req, res) => {
 // CREATE
 const createPromo = async (req, res) => {
   try {
-    const { code, discount, type, maxDiscount, isActive } = req.body;
-
-    if (!code || !discount || !type) {
-      return res.status(400).json({
-        message: "code, discount, dan type wajib diisi"
-      });
-    }
-
-    const data = await repo.createPromo({
-      code,
-      discount,
-      type,
-      maxDiscount,
-      isActive
-    });
-
+    const data = await service.createPromo(req.body);
     res.status(201).json(data);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -53,7 +38,7 @@ const createPromo = async (req, res) => {
 // UPDATE
 const updatePromo = async (req, res) => {
   try {
-    const data = await repo.updatePromo(req.params.id, req.body);
+    const data = await service.updatePromo(req.params.id, req.body);
 
     if (!data) {
       return res.status(404).json({ message: "Promo not found" });
@@ -68,7 +53,7 @@ const updatePromo = async (req, res) => {
 // DELETE
 const deletePromo = async (req, res) => {
   try {
-    const data = await repo.deletePromo(req.params.id);
+    const data = await service.deletePromo(req.params.id);
 
     if (!data) {
       return res.status(404).json({ message: "Promo not found" });
@@ -80,39 +65,16 @@ const deletePromo = async (req, res) => {
   }
 };
 
-// APPLY PROMO
+// APPLY PROMO 🔥
 const applyPromo = async (req, res) => {
   try {
     const { code, amount } = req.body;
 
-    const promos = await repo.getPromos();
-    const promo = promos.find(p => p.code === code && p.isActive);
+    const result = await service.applyPromo(code, amount);
 
-    if (!promo) {
-      return res.status(404).json({ message: "Promo tidak valid" });
-    }
-
-    let discountAmount = 0;
-
-    if (promo.type === "percentage") {
-      discountAmount = (promo.discount / 100) * amount;
-
-      if (promo.maxDiscount) {
-        discountAmount = Math.min(discountAmount, promo.maxDiscount);
-      }
-    } else {
-      discountAmount = promo.discount;
-    }
-
-    const finalPrice = amount - discountAmount;
-
-    res.json({
-      discountAmount,
-      finalPrice
-    });
-
+    res.json(result);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 };
 
