@@ -1,7 +1,5 @@
 const express = require("express");
-
 const staffcontroller = require("./staff_controller");
-
 const router = express.Router();
 
 module.exports = (app) => {

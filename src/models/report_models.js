@@ -1,32 +1,25 @@
 module.exports = (db) => {
-  const Staff = db.define("staff", {
-    NIP: {
+  const report = db.define("report", {
+    idreport: {
       type: Number(20),
       primaryKey: true,
       autoIncrement: true,
       require: true,
     },
 
-    names: {
+    title: {
       type: String(50),
       require: true,
     },
 
-    position: {
-      type: String(30),
+    start_date: {
+      type: Date,
       require: true,
     },
 
-    email: {
-      type: String(50),
-      require: true,
-      unique: true,
-    },
-
-    phone: {
-      type: Number(15),
+    end_date: {
+      type: Date,
       require: true,
     },
   });
-  return Staff;
 };
