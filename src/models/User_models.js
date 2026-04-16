@@ -15,16 +15,16 @@ const User = sequelize.define(
             allowNull: false,
             validate:{
                 nptEmpty: { msg: "Nama tidak boleh kosong"},
-                len: { args: [2, 50], msg: "Nama harus antara 2 - 50 karakter"},
+                len: { args: [2, 50], msg: "Unsur Nama harus antara 2 - 50 karakter"},
             },
         },
         username: {
             type: DataType.STRING(50),
             allowNull: false,
-            unique: { msg: "Username sudah digunakan"},
+            unique: { msg: "Username sudah digunakan/ sudah di pakai"},
             validate: {
                 notEmpty: { msg: "Username tidak boleh kosong"},
-                len: { args: [3, 50], massage:"User harus antara 3 - 50 karakter"},
+                len: { args: [3, 50], massage:"Unsur User harus antara 3 - 50 karakter"},
                 is: {
                     args: /^[a-zA-Z0-9_]+$/,
                     massage: "Username hanya boleh huruf, angka, dan underscore",
