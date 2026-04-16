@@ -1,23 +1,23 @@
-const { staff } = require("../../../../models");
+const { Staff } = require("src/api/models");
 
 async function getStaffs() {
-  return staff.find({});
+  return Staff.find({});
 }
 
 async function getStaffById(id) {
-  return staff.findById(id);
+  return Staff.findById(id);
 }
 
 async function createStaff(data) {
-  return staff.create(data);
+  return Staff.create(data);
 }
 
 async function updateStaff(id, data) {
-  return staff.findByIdAndUpdate(id, data, { new: true });
+  return Staff.findByIdAndUpdate(id, data, { new: true });
 }
 
 async function deleteStaff(id) {
-  return staff.findByIdAndDelete(id);
+  return Staff.findByIdAndDelete(id);
 }
 
 module.exports = {
