@@ -4,9 +4,7 @@ const successResponse = (res, { message = "Berhasil", data = null, statusCode = 
   return res.status(statusCode).json(response);
 };
  
-/**
- * Response error standar
- */
+
 const errorResponse = (res, { message = "Terjadi kesalahan", errors = null, statusCode = 400 } = {}) => {
   const response = { success: false, message };
   if (errors) response.errors = errors;

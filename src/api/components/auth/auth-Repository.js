@@ -1,200 +1,122 @@
-const { Op } = require("sequelize");
-const { User, AuditLog } = require("../models");
-const logger = require("../utils/logger");
- 
+// src/repositories/auth.repository.js
+const User     = require("../models/user.model");
+const AuditLog = require("../models/auditLog.model");
+const logger   = require("../utils/logger");
+
 class AuthRepository {
-  // USER QUERIES
- 
-    //Cari user berdasarkan username atau email (untuk login)  
-  async findByUsernameOrEmail(identifier) {
-    return User.findOne({
-      where: {
-        [Op.or]: [
-          { username: identifier.toLowerCase() },
-          { email: identifier.toLowerCase() },
-        ],
-      },
-    });
-  }
- 
-  
-    //Cari user berdasarkan ID
-   
-  async findById(id) {
-    return User.findByPk(id);
-  }
- 
-  
-   // Cari user berdasarkan refresh token
-   
-  async findByRefreshToken(token) {
-    return User.findOne({ where: { refreshToken: token } });
-  }
- 
-  
-   // Cek apakah username sudah ada
-   
-  async isUsernameTaken(username, excludeId = null) {
-    const where = { username: username.toLowerCase() };
-    if (excludeId) where.id = { [Op.ne]: excludeId };
-    const count = await User.count({ where });
-    return count > 0;
-  }
- 
-  
-  //  Cek apakah email sudah ada
-   
-  async isEmailTaken(email, excludeId = null) {
-    const where = { email: email.toLowerCase() };
-    if (excludeId) where.id = { [Op.ne]: excludeId };
-    const count = await User.count({ where });
-    return count > 0;
-  }
- 
-  
-   // Cek apakah NIP sudah ada
-   
-  async isNipTaken(nip, excludeId = null) {
-    if (!nip) return false;
-    const where = { nip };
-    if (excludeId) where.id = { [Op.ne]: excludeId };
-    const count = await User.count({ where });
-    return count > 0;
-  }
- 
-  
-   //Hitung jumlah user yang ada (untuk bootstrap admin pertama)
-   
-  async countUsers() {
-    return User.count();
-  }
- 
-  //USER MUTATIONS
- 
-  
-   //Buat user baru
-   
-  async createUser(data) {
-    return User.create(data);
-  }
- 
-  
-   // Update refresh token user
-   
-  async updateRefreshToken(userId, token) {
-    return User.update({ refreshToken: token }, { where: { id: userId } });
-  }
- 
-  
-   // Update data last login
-   
-  async updateLastLogin(userId, ip) {
-    return User.update(
-      {
-        lastLoginAt: new Date(),
-        lastLoginIp: ip,
-        loginAttempts: 0,
-        lockedUntil: null,
-      },
-      { where: { id: userId } }
-    );
-  }
- 
-  
-    //Hapus refresh token (logout)
-   
-  async clearRefreshToken(userId) {
-    return User.update({ refreshToken: null }, { where: { id: userId } });
-  }
- 
-  
-   //Approve registrasi user
-   
-  async approveUser(userId, approverId) {
-    return User.update(
-      {
-        isApproved: true,
-        approvedBy: approverId,
-        approvedAt: new Date(),
-      },
-      { where: { id: userId } }
-    );
-  }
- 
-  
-   //Reject / nonaktifkan user
-   
-  async rejectUser(userId) {
-    return User.update({ isActive: false }, { where: { id: userId } });
-  }
- 
-  
-   // Ambil daftar user pending approval
-   
-  async getPendingUsers() {
-    return User.findAll({
-      where: { isApproved: false, isActive: true },
-      attributes: { exclude: ["password", "refreshToken"] },
-      order: [["createdAt", "ASC"]],
-    });
-  }
- 
-  
-   //Ambil semua user (untuk supervisor/admin)
-   
-  async getAllUsers({ page = 1, limit = 20, status = null, search = null } = {}) {
-    const where = {};
-    if (status) where.status = status;
-    if (search) {
-      where[Op.or] = [
-        { nama: { [Op.like]: `%${search}%` } },
-        { username: { [Op.like]: `%${search}%` } },
-        { email: { [Op.like]: `%${search}%` } },
-      ];
+    async findByUsernameOrEmail(identifier) {
+        const lower = identifier.toLowerCase();
+        return User.findOne({ $or: [{ username: lower }, { email: lower }] })
+            .select("+password +refreshToken +loginAttempts +lockedUntil");
     }
- 
-    const { count, rows } = await User.findAndCountAll({
-      where,
-      attributes: { exclude: ["password", "refreshToken"] },
-      order: [["createdAt", "DESC"]],
-      limit,
-      offset: (page - 1) * limit,
-    });
- 
-    return {
-      users: rows,
-      total: count,
-      page,
-      totalPages: Math.ceil(count / limit),
-    };
-  }
- 
-  //AUDIT LOG
- 
- //simpan logg aktivitas
-  async createAuditLog({ userId, action, detail, ipAddress, userAgent, username }) {
-    try {
-      return AuditLog.create({
-        userId,
-        action,
-        detail,
-        ipAddress,
-        userAgent,
-        username,
-      });
-    } catch (err) {
-      logger.error("Gagal menyimpan audit log:", err);
+
+    async findById(id) {
+        return User.findById(id).select("+password +refreshToken");
     }
-  }
- 
-  //ambil audit user
-  async getAuditLogs(userId, limit = 50) {
-    return AuditLog.findAll({
-      where: { userId },
-      order: [["createdAt", "DESC"]],
-      limit,
-    });
-  }
+
+    async findByRefreshToken(token) {
+        return User.findOne({ refreshToken: token }).select("+refreshToken");
+    }
+
+    async isUsernameTaken(username, excludeId = null) {
+        const query = { username: username.toLowerCase() };
+        if (excludeId) query._id = { $ne: excludeId };
+        return (await User.countDocuments(query)) > 0;
+    }
+
+    async isEmailTaken(email, excludeId = null) {
+        const query = { email: email.toLowerCase() };
+        if (excludeId) query._id = { $ne: excludeId };
+        return (await User.countDocuments(query)) > 0;
+    }
+
+    async isNipTaken(nip, excludeId = null) {
+        if (!nip) return false;
+        const query = { nip };
+        if (excludeId) query._id = { $ne: excludeId };
+        return (await User.countDocuments(query)) > 0;
+    }
+
+    async countUsers() {
+        return User.countDocuments();
+    }
+
+    async createUser(data) {
+        const user = new User(data);
+        await user.save();
+        return user;
+    }
+
+    async updateRefreshToken(userId, token) {
+        return User.findByIdAndUpdate(userId, { refreshToken: token }, { new: true });
+    }
+
+    async clearRefreshToken(userId) {
+        return User.findByIdAndUpdate(userId, { refreshToken: null });
+    }
+
+    async updateLastLogin(userId, ip) {
+        return User.findByIdAndUpdate(
+            userId,
+            { lastLoginAt: new Date(), lastLoginIp: ip, loginAttempts: 0, lockedUntil: null },
+            { new: true }
+        );
+    }
+
+    async approveUser(userId, approverId) {
+        return User.findByIdAndUpdate(
+            userId,
+            { isApproved: true, approvedBy: approverId, approvedAt: new Date() },
+            { new: true }
+        );
+    }
+    
+    async rejectUser(userId) {
+        return User.findByIdAndUpdate(userId, { isActive: false }, { new: true });
+    }
+
+    async getPendingUsers() {
+        return User.find({ isApproved: false, isActive: true })
+            .sort({ createdAt: 1 })
+            .select("-password -refreshToken -loginAttempts -lockedUntil -lastLoginIp");
+    }
+
+    async getAllUsers({ page = 1, limit = 20, status = null, search = null } = {}) {
+        const filter = {};
+        if (status) filter.status = status;
+        if (search) {
+            filter.$or = [
+                { nama:{ $regex: search, $options: "i" } },
+                { username:{ $regex: search, $options: "i" } },
+                { email:{ $regex: search, $options: "i" } },
+            ];
+        }
+
+        const [total, users] = await Promise.all([
+            User.countDocuments(filter),
+            User.find(filter)
+                .sort({ createdAt: -1 })
+                .skip((page - 1) * limit)
+                .limit(limit)
+                .select("-password -refreshToken -loginAttempts -lockedUntil -lastLoginIp"),
+        ]);
+
+        return { users, total, page, totalPages: Math.ceil(total / limit) };
+    }
+
+    async createAuditLog({ userId, action, detail, ipAddress, userAgent, username }) {
+        try {
+            return AuditLog.create({ userId, action, detail, ipAddress, userAgent, username });
+        } catch (err) {
+            logger.error("Gagal simpan audit log:", err);
+        }
+    }
+
+    async getAuditLogs(userId, limit = 50) {
+        return AuditLog.find({ userId })
+            .sort({ createdAt: -1 })
+            .limit(limit);
+    }
 }
- 
+
 module.exports = new AuthRepository();

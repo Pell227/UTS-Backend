@@ -23,7 +23,7 @@ module.exports = (db) => {
         },
         date: {
             type: Date,
-            required: true
+            required: true___
         }
     });
     return Transactions;

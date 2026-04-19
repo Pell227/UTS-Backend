@@ -50,7 +50,7 @@ const seed = async () => {
     });
   }
  
-  logger.info("✅ Seed berhasil!");
+  logger.info("Seed berhasil!");
   logger.info("Username : admin");
   logger.info("Password : Admin@1234");
   logger.warn("SEGERA GANTI PASSWORD SETELAH LOGIN PERTAMA!");
