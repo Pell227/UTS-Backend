@@ -12,6 +12,6 @@ module.exports = (app) => {
   router.put("/:id", controller.updatePromo);
   router.delete("/:id", controller.deletePromo);
 
-  // 🔥 BONUS ENDPOINT
+  // BONUS ENDPOINT
   router.post("/apply", controller.applyPromo);
 };

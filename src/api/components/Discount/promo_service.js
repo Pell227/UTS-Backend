@@ -31,7 +31,7 @@ const deletePromo = async (id) => {
   return await repo.deletePromo(id);
 };
 
-// 🔥 APPLY PROMO (logic utama di sini)
+// APPLY PROMO (logic utama di sini)
 const applyPromo = async (code, amount) => {
   const promos = await repo.getPromos();
   const promo = promos.find(p => p.code === code && p.isActive);
