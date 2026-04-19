@@ -1,35 +1,29 @@
-module.exports = (productRepository) => {
-  const getProducts = async () => {
-    return await productRepository.getAll();
-  };
+const productRepository = require("./product_repository");
 
-  const getProductById = async (id) => {
-    const product = await productRepository.getById(id);
-    if (!product) throw new Error("Product not found");
-    return product;
-  };
+async function getProducts() {
+  return await productRepository.getProducts();
+}
 
-  const createProduct = async (data) => {
-    return await productRepository.create(data);
-  };
+async function getProductById(id) {
+  return await productRepository.getProductById(id);
+}
 
-  const updateProduct = async (id, data) => {
-    const product = await productRepository.update(id, data);
-    if (!product) throw new Error("Product not found");
-    return product;
-  };
+async function createProduct(data) {
+  return await productRepository.createProduct(data);
+}
 
-  const deleteProduct = async (id) => {
-    const product = await productRepository.remove(id);
-    if (!product) throw new Error("Product not found");
-    return product;
-  };
+async function updateProduct(id, data) {
+  return await productRepository.updateProduct(id, data);
+}
 
-  return {
-    getProducts,
-    getProductById,
-    createProduct,
-    updateProduct,
-    deleteProduct,
-  };
+async function deleteProduct(id) {
+  return await productRepository.deleteProduct(id);
+}
+
+module.exports = {
+  getProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
 };
