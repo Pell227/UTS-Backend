@@ -1,5 +1,5 @@
 const express = require("express");
-const promoController = require("../controllers/promo_controller");
+const promoController = require("../../components/");
 
 const router = express.Router();
 

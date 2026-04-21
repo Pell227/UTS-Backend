@@ -10,7 +10,6 @@ const getPromos = async (req, res) => {
   }
 };
 
-// GET BY ID
 const getPromoById = async (req, res) => {
   try {
     const data = await repo.getPromoById(req.params.id);
@@ -32,7 +31,7 @@ const createPromo = async (req, res) => {
 
     if (!code || !discount || !type) {
       return res.status(400).json({
-        message: "code, discount, dan type wajib diisi"
+        message: "code, discount, dan type wajib diisi",
       });
     }
 
@@ -41,7 +40,7 @@ const createPromo = async (req, res) => {
       discount,
       type,
       maxDiscount,
-      isActive
+      isActive,
     });
 
     res.status(201).json(data);
@@ -86,7 +85,7 @@ const applyPromo = async (req, res) => {
     const { code, amount } = req.body;
 
     const promos = await repo.getPromos();
-    const promo = promos.find(p => p.code === code && p.isActive);
+    const promo = promos.find((p) => p.code === code && p.isActive);
 
     if (!promo) {
       return res.status(404).json({ message: "Promo tidak valid" });
@@ -108,9 +107,8 @@ const applyPromo = async (req, res) => {
 
     res.json({
       discountAmount,
-      finalPrice
+      finalPrice,
     });
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -122,5 +120,5 @@ module.exports = {
   createPromo,
   updatePromo,
   deletePromo,
-  applyPromo
+  applyPromo,
 };

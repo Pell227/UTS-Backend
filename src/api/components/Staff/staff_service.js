@@ -1,4 +1,4 @@
-const staffrepository = require("src/api/components/Staff/staff_repository");
+const staffrepository = require("./staff_repository");
 
 async function getAllStaff() {
   return await staffrepository.getStaffs();
