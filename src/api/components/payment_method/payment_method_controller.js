@@ -1,4 +1,5 @@
-const service = require("../services/payment_method_service");
+
+const service = require("../../payment_method/payment_method_service");
 
 // GET ALL + FILTER
 const getAllPaymentMethods = async (req, res) => {

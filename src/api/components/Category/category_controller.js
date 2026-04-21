@@ -112,7 +112,7 @@ const getCategoryBySorting = async(req, res) => {
     try {
         const{sortBy = "nameK", order = "ASC"} = req.query;
 
-        const data = await categoryClassification.getCategoriesBySorting(soryBy, order);
+        const data = await categoryClassification.getCategoriesBySorting(sortBy, order);
 
         return res.status(200).json({
             success : true,
