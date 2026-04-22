@@ -1,5 +1,5 @@
-const service = require("../services/payment_method_service");
-const { errorTypes, errorResponder } = require("../../core/error");
+const service = require("./payment_method_service");
+const { errorTypes, errorResponder } = require("../../../core/error");
 
 // GET ALL + FILTER
 const getAllPaymentMethods = async (req, res, next) => {

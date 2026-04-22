@@ -1,4 +1,4 @@
-const { product } = require("../../models");
+const { product } = require("../../../models/product_models");
 
 async function getProducts() {
   return product.findAll();
