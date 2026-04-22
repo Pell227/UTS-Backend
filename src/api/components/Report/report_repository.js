@@ -1,4 +1,4 @@
-const { report } = require("../../models");
+const { report } = require("../../../models/report_models");
 
 async function getReports() {
   return report.find({});

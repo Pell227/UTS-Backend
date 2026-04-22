@@ -3,7 +3,8 @@ module.exports = (db) => {
         order_id: {
             type: String,
             required: true,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
         item_name: {
             type : String,
