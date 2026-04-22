@@ -1,4 +1,4 @@
-const { payment_method } = require("../models");
+const { payment_method } = require("../../../models/payment_method_models");
 
 async function getPaymentMethods(filter = {}) {
   return payment_method.find(filter);
