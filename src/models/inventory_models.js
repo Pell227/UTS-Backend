@@ -1,6 +1,6 @@
 module.exports = (db) => {
     const Inventory = db.define('inventory', {
-        id : {
+        InvenId : {
             type : Number,
             require : true
         },
