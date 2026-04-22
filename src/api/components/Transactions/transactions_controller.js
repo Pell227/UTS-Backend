@@ -1,49 +1,87 @@
 const transactionsservice = require("./transactions_service");
+const { errorTypes, errorResponder } = require("../../../core/error");
 
-const createTransaction = async (req, res) => {
+// CREATE
+const createTransaction = async (req, res, next) => {
   try {
-    const transaction = await transaction.create(req.body.orderId);
+    const transaction = await transactionsservice.createTransaction(req.body);
     res.status(201).json(transaction);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return next(
+      errorResponder(errorTypes.BAD_REQUEST, error.message)
+    );
   }
 };
 
-const getAllTransactions = async (req, res) => {
+// GET ALL
+const getAllTransactions = async (req, res, next) => {
   try {
-    const transactions = await transaction.find();
+    const transactions = await transactionsservice.getAllTransactions();
     res.status(200).json(transactions);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return next(
+      errorResponder(errorTypes.SERVER, error.message)
+    );
   }
 };
 
-const getTransactionById = async (req, res) => {
+// GET BY ID
+const getTransactionById = async (req, res, next) => {
   try {
-    const transaction = await transaction.findById(req.params.id);
-    if (!transaction)
-      return res.status(404).json({ message: "Transaction not found" });
+    const transaction = await transactionsservice.getTransactionById(req.params.id);
+
+    if (!transaction) {
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Transaction not found")
+      );
+    }
+
     res.status(200).json(transaction);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return next(
+      errorResponder(errorTypes.SERVER, error.message)
+    );
   }
 };
 
-const updateTransaction = async (req, res) => {
+// UPDATE
+const updateTransaction = async (req, res, next) => {
   try {
-    const transaction = await transaction.findByIdAndUpdate(req.params.id);
+    const transaction = await transactionsservice.updateTransaction(
+      req.params.id,
+      req.body
+    );
+
+    if (!transaction) {
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Transaction not found")
+      );
+    }
+
     res.status(200).json(transaction);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return next(
+      errorResponder(errorTypes.BAD_REQUEST, error.message)
+    );
   }
 };
 
-const deleteTransaction = async (req, res) => {
+// DELETE
+const deleteTransaction = async (req, res, next) => {
   try {
-    await transaction.findByIdAndDelete(req.params.id);
+    const transaction = await transactionsservice.deleteTransaction(req.params.id);
+
+    if (!transaction) {
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Transaction not found")
+      );
+    }
+
     res.status(200).json({ message: "Transaction deleted" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return next(
+      errorResponder(errorTypes.SERVER, error.message)
+    );
   }
 };
 

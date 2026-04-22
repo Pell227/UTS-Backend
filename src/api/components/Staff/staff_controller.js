@@ -1,51 +1,90 @@
-const staffservice = require("./staff_service");
-const staffroutes = require("./staff_routes");
-const getAllStaff = async (req, res) => {
+const Staff = require("./staff_model");
+const { errorTypes, errorResponder } = require("../../../core/error");
+
+// GET ALL
+const getAllStaff = async (req, res, next) => {
   try {
     const staff = await Staff.find();
     res.status(200).json(staff);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return next(
+      errorResponder(errorTypes.SERVER, error.message)
+    );
   }
 };
 
-const getStaffById = async (req, res) => {
+// GET BY ID
+const getStaffById = async (req, res, next) => {
   try {
     const staff = await Staff.findById(req.params.id);
-    if (!staff) return res.status(404).json({ message: "Staff not found" });
+
+    if (!staff) {
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Staff not found")
+      );
+    }
+
     res.status(200).json(staff);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return next(
+      errorResponder(errorTypes.SERVER, error.message)
+    );
   }
 };
 
-const createStaff = async (req, res) => {
-  const staff = new Staff(req.body);
+// CREATE
+const createStaff = async (req, res, next) => {
   try {
+    const staff = new Staff(req.body);
     const newStaff = await staff.save();
+
     res.status(201).json(newStaff);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return next(
+      errorResponder(errorTypes.BAD_REQUEST, error.message)
+    );
   }
 };
 
-const updateStaff = async (req, res) => {
+// UPDATE
+const updateStaff = async (req, res, next) => {
   try {
-    const staff = await Staff.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const staff = await Staff.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    if (!staff) {
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Staff not found")
+      );
+    }
+
     res.status(200).json(staff);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return next(
+      errorResponder(errorTypes.BAD_REQUEST, error.message)
+    );
   }
 };
 
-const deleteStaff = async (req, res) => {
+// DELETE
+const deleteStaff = async (req, res, next) => {
   try {
-    await Staff.findByIdAndDelete(req.params.id);
+    const staff = await Staff.findByIdAndDelete(req.params.id);
+
+    if (!staff) {
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Staff not found")
+      );
+    }
+
     res.status(200).json({ message: "Staff deleted" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return next(
+      errorResponder(errorTypes.SERVER, error.message)
+    );
   }
 };
 

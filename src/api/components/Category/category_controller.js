@@ -1,129 +1,130 @@
 const categoryClassification = require("./category_repository");
+const { errorTypes, errorResponder } = require("../../../core/error");
 
-const getAllCategories = async(req, res) => {
+// GET ALL
+const getAllCategories = async (req, res, next) => {
     try {
         const data = await categoryClassification.getAllCategories();
         return res.status(200).json({
-            success : true,
+            success: true,
             data
         });
     } catch (error) {
-        return res.status(500).json({
-            success : false,
-            message : error.message
-        });
-    }   
+        return next(
+            errorResponder(errorTypes.SERVER, error.message)
+        );
+    }
 };
 
-const getCategoryById = async(req, res) => {
+// GET BY ID
+const getCategoryById = async (req, res, next) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         const data = await categoryClassification.getCategoryById(id);
 
         if (!data) {
-            return res.status(404).json({
-                success : false,
-                message : "Data Tidak Ditemukan"
-            });
-        }   
+            return next(
+                errorResponder(errorTypes.NOT_FOUND, "Data Tidak Ditemukan")
+            );
+        }
+
         return res.status(200).json({
-            success:true,
+            success: true,
             data
         });
     } catch (error) {
-        return res.status(500).json({
-            success : false,
-            message : error.message
-        });
+        return next(
+            errorResponder(errorTypes.SERVER, error.message)
+        );
     }
 };
 
-const createCategory = async(req, res) => {
+// CREATE
+const createCategory = async (req, res, next) => {
     try {
         const newData = await categoryClassification.createCategory(req.body);
-        
-        return res.status(201).json ({
-            success : true,
-            message : "Berhasil menambahkan Kategori",
-            data : newData
+
+        return res.status(201).json({
+            success: true,
+            message: "Berhasil menambahkan Kategori",
+            data: newData
         });
     } catch (error) {
-        return res.status(500).json({
-            success : false,
-            message : error.message
-        });
+        return next(
+            errorResponder(errorTypes.SERVER, error.message)
+        );
     }
 };
 
-const updateCategory = async(req, res) => {
+// UPDATE
+const updateCategory = async (req, res, next) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         const updated = await categoryClassification.updateCategory(id, req.body);
 
         return res.status(200).json({
-            success : true,
-            data : updated
+            success: true,
+            data: updated
         });
     } catch (error) {
-        return res.status(500).json({
-            success : false,
-            message : error.message
-        });
+        return next(
+            errorResponder(errorTypes.SERVER, error.message)
+        );
     }
 };
 
-const deleteCategory = async(req, res) => {
+// DELETE
+const deleteCategory = async (req, res, next) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         await categoryClassification.deleteCategory(id);
 
         return res.status(200).json({
-            success : true,
-            message : "Data telah dihapus"
+            success: true,
+            message: "Data telah dihapus"
         });
     } catch (error) {
-        return res.status(500).json({
-            success : false,
-            message : error.message
-        });
+        return next(
+            errorResponder(errorTypes.SERVER, error.message)
+        );
     }
 };
 
-const getCategoryByName = async(req, res) => {
+// SEARCH
+const getCategoryByName = async (req, res, next) => {
     try {
-        const {keyword} = req.query;
+        const { keyword } = req.query;
 
         const data = await categoryClassification.getCategoryByName(keyword);
 
         return res.status(200).json({
-            success : true,
-            message : "Data berhasil ditemukan",
+            success: true,
+            message: "Data berhasil ditemukan",
             data
         });
     } catch (error) {
-        return res.status(500).json({
-            success : false,
-            message : error.message
-        });
+        return next(
+            errorResponder(errorTypes.SERVER, error.message)
+        );
     }
 };
 
-const getCategoryBySorting = async(req, res) => {
+// SORT
+const getCategoryBySorting = async (req, res, next) => {
     try {
-        const{sortBy = "nameK", order = "ASC"} = req.query;
+        const { sortBy = "nameK", order = "ASC" } = req.query;
 
         const data = await categoryClassification.getCategoriesBySorting(sortBy, order);
 
         return res.status(200).json({
-            success : true,
-            message : "Data berhasil di Sorting",
+            success: true,
+            message: "Data berhasil di Sorting",
             data
         });
     } catch (error) {
-        return req.status(500).json ({
-            success : false,
-            message : error.message
-        });
+        return next(
+            errorResponder(errorTypes.SERVER, error.message)
+        );
     }
 };
 
@@ -135,4 +136,4 @@ module.exports = {
     deleteCategory,
     getCategoryByName,
     getCategoryBySorting
-}
+};

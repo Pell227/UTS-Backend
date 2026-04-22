@@ -1,65 +1,87 @@
 const productService = require("./product_service");
+const { errorTypes, errorResponder } = require("../../../core/error");
 
-async function getAllProducts(req, res) {
+// GET ALL
+async function getAllProducts(req, res, next) {
   try {
     const products = await productService.getProducts();
     res.json(products);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return next(
+      errorResponder(errorTypes.SERVER, error.message)
+    );
   }
 }
 
-async function getProductById(req, res) {
+// GET BY ID
+async function getProductById(req, res, next) {
   try {
     const product = await productService.getProductById(req.params.id);
 
     if (!product) {
-      return res.status(404).json({ error: "Product not found" });
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Product not found")
+      );
     }
 
     res.json(product);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return next(
+      errorResponder(errorTypes.SERVER, error.message)
+    );
   }
 }
 
-async function createProduct(req, res) {
+// CREATE
+async function createProduct(req, res, next) {
   try {
     const newProduct = await productService.createProduct(req.body);
     res.status(201).json(newProduct);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return next(
+      errorResponder(errorTypes.BAD_REQUEST, error.message)
+    );
   }
 }
 
-async function updateProduct(req, res) {
+// UPDATE
+async function updateProduct(req, res, next) {
   try {
     const updatedProduct = await productService.updateProduct(
       req.params.id,
-      req.body,
+      req.body
     );
 
     if (!updatedProduct) {
-      return res.status(404).json({ error: "Product not found" });
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Product not found")
+      );
     }
 
     res.json(updatedProduct);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return next(
+      errorResponder(errorTypes.BAD_REQUEST, error.message)
+    );
   }
 }
 
-async function deleteProduct(req, res) {
+// DELETE
+async function deleteProduct(req, res, next) {
   try {
     const deletedProduct = await productService.deleteProduct(req.params.id);
 
     if (!deletedProduct) {
-      return res.status(404).json({ error: "Product not found" });
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Product not found")
+      );
     }
 
     res.json({ message: "Product deleted successfully" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return next(
+      errorResponder(errorTypes.SERVER, error.message)
+    );
   }
 }
 
