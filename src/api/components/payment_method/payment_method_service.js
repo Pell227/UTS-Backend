@@ -1,4 +1,4 @@
-const repo = require("../repository/payment_method_repository");
+const repo = require("./payment_method_repository");
 
 // GET ALL + FILTER
 const getPaymentMethods = async (query) => {
