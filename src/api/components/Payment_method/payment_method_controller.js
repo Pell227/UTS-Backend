@@ -1,4 +1,4 @@
-const service = require("../services/payment_method_service");
+const service = require("./payment_method_service");
 const { errorTypes, errorResponder } = require("../../../core/error");
 
 // GET ALL + FILTER
