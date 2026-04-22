@@ -21,7 +21,10 @@ module.exports = (inventory_service) => {
     const findAllInventory = async (req, res, next) => {
         try {
             const data = await inventory_service.getAllInventory();
-            res.json(data);
+            res.json({
+                success: true,
+                data
+            });
         } catch (err) {
             return next(
                 errorResponder(errorTypes.SERVER, err.message)
@@ -39,10 +42,13 @@ module.exports = (inventory_service) => {
                 );
             }
 
-            res.json(data);
+            res.json({
+                success: true,
+                data
+            });
         } catch (err) {
             return next(
-                errorResponder(errorTypes.BAD_REQUEST, err.message)
+                errorResponder(errorTypes.SERVER, err.message)
             );
         }
     };
@@ -85,7 +91,7 @@ module.exports = (inventory_service) => {
             });
         } catch (err) {
             return next(
-                errorResponder(errorTypes.BAD_REQUEST, err.message)
+                errorResponder(errorTypes.SERVER, err.message)
             );
         }
     };
