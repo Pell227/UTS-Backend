@@ -1,5 +1,5 @@
-const service = require("../services/promo_service");
-const { errorTypes, errorResponder } = require("../../core/error");
+const service = require("./promo_service");
+const { errorTypes, errorResponder } = require("../../../core/error");
 
 // GET ALL
 const getPromos = async (req, res, next) => {
@@ -7,9 +7,7 @@ const getPromos = async (req, res, next) => {
     const data = await service.getPromos();
     res.json(data);
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.SERVER, error.message)
-    );
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 };
 
@@ -19,16 +17,12 @@ const getPromoById = async (req, res, next) => {
     const data = await service.getPromoById(req.params.id);
 
     if (!data) {
-      return next(
-        errorResponder(errorTypes.NOT_FOUND, "Promo not found")
-      );
+      return next(errorResponder(errorTypes.NOT_FOUND, "Promo not found"));
     }
 
     res.json(data);
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.SERVER, error.message)
-    );
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 };
 
@@ -38,9 +32,7 @@ const createPromo = async (req, res, next) => {
     const data = await service.createPromo(req.body);
     res.status(201).json(data);
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.BAD_REQUEST, error.message)
-    );
+    return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
   }
 };
 
@@ -50,16 +42,12 @@ const updatePromo = async (req, res, next) => {
     const data = await service.updatePromo(req.params.id, req.body);
 
     if (!data) {
-      return next(
-        errorResponder(errorTypes.NOT_FOUND, "Promo not found")
-      );
+      return next(errorResponder(errorTypes.NOT_FOUND, "Promo not found"));
     }
 
     res.json(data);
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.BAD_REQUEST, error.message)
-    );
+    return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
   }
 };
 
@@ -69,16 +57,12 @@ const deletePromo = async (req, res, next) => {
     const data = await service.deletePromo(req.params.id);
 
     if (!data) {
-      return next(
-        errorResponder(errorTypes.NOT_FOUND, "Promo not found")
-      );
+      return next(errorResponder(errorTypes.NOT_FOUND, "Promo not found"));
     }
 
     res.json({ message: "Promo deleted" });
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.SERVER, error.message)
-    );
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 };
 
@@ -91,9 +75,7 @@ const applyPromo = async (req, res, next) => {
 
     res.json(result);
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.BAD_REQUEST, error.message)
-    );
+    return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
   }
 };
 
@@ -103,5 +85,5 @@ module.exports = {
   createPromo,
   updatePromo,
   deletePromo,
-  applyPromo
+  applyPromo,
 };
