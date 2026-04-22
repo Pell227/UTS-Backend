@@ -3,7 +3,8 @@ module.exports = (db) => {
         order_id: {
             type: String,
             required: true,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
         item_name: {
             type : String,
@@ -23,7 +24,7 @@ module.exports = (db) => {
         },
         date: {
             type: Date,
-            required: true
+            required: true___
         }
     });
     return Transactions;

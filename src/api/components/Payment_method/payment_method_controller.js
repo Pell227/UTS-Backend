@@ -7,9 +7,7 @@ const getAllPaymentMethods = async (req, res, next) => {
     const data = await service.getPaymentMethods(req.query);
     res.json(data);
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.SERVER, error.message)
-    );
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 };
 
@@ -20,15 +18,13 @@ const getPaymentMethodById = async (req, res, next) => {
 
     if (!data) {
       return next(
-        errorResponder(errorTypes.NOT_FOUND, "Payment method not found")
+        errorResponder(errorTypes.NOT_FOUND, "Payment method not found"),
       );
     }
 
     res.json(data);
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.SERVER, error.message)
-    );
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 };
 
@@ -38,9 +34,7 @@ const createPaymentMethod = async (req, res, next) => {
     const data = await service.createPaymentMethod(req.body);
     res.status(201).json(data);
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.BAD_REQUEST, error.message)
-    );
+    return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
   }
 };
 
@@ -51,15 +45,13 @@ const updatePaymentMethod = async (req, res, next) => {
 
     if (!data) {
       return next(
-        errorResponder(errorTypes.NOT_FOUND, "Payment method not found")
+        errorResponder(errorTypes.NOT_FOUND, "Payment method not found"),
       );
     }
 
     res.json(data);
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.BAD_REQUEST, error.message)
-    );
+    return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
   }
 };
 
@@ -70,15 +62,13 @@ const deletePaymentMethod = async (req, res, next) => {
 
     if (!data) {
       return next(
-        errorResponder(errorTypes.NOT_FOUND, "Payment method not found")
+        errorResponder(errorTypes.NOT_FOUND, "Payment method not found"),
       );
     }
 
     res.json({ message: "Payment method deleted" });
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.SERVER, error.message)
-    );
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 };
 
@@ -91,15 +81,13 @@ const updateStatus = async (req, res, next) => {
 
     if (!data) {
       return next(
-        errorResponder(errorTypes.NOT_FOUND, "Payment method not found")
+        errorResponder(errorTypes.NOT_FOUND, "Payment method not found"),
       );
     }
 
     res.json(data);
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.BAD_REQUEST, error.message)
-    );
+    return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
   }
 };
 
@@ -109,5 +97,5 @@ module.exports = {
   createPaymentMethod,
   updatePaymentMethod,
   deletePaymentMethod,
-  updateStatus
+  updateStatus,
 };
