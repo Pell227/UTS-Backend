@@ -1,4 +1,4 @@
-const { supplier } = require("../../models");
+const { supplier } = require("../../../models/supplier_models");
 
 async function getSuppliers() {
   return supplier.findAll();

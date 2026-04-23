@@ -7,6 +7,7 @@ const app = express();
 const config = require("./config");
 const { errorResponder, errorTypes } = require("./error");
 const bodyparser = require("body-parser");
+const logger = require("../api/components/utils/logger");
 
 app.enable("trust proxy");
 

@@ -8,6 +8,8 @@ const category = require("./components/category/category_routes");
 const transaction = require("./components/Transactions/transactions_routes");
 const transaction_list = require("./components/Transaction_list/TL_route");
 const promo = require("./components/Discount/promo_routes");
+const suplier = require("./components/Supplier/supplier_route");
+const inventory = require("./components/Inventory/inventory_routes");
 
 module.exports = () => {
   const app = express.Router();

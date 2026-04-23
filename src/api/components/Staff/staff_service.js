@@ -9,15 +9,15 @@ async function getStaffById(id) {
 }
 
 async function createstaff(data) {
-  return await reportrepository.createReport(data);
+  return await staffrepository.createStaff(data);
 }
 
 async function updatestaff(id, data) {
-  return await reportrepository.updateReport(id, data);
+  return await staffrepository.updateStaff(id, data);
 }
 
 async function deletestaff(id) {
-  return await reportrepository.deleteReport(id);
+  return await staffrepository.deleteStaff(id);
 }
 
 module.exports = {
