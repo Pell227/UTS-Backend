@@ -1,4 +1,4 @@
-const { Staff } = require("src/api/models");
+const { Staff } = require("../../../models/staff_models");
 
 async function getStaffs() {
   return Staff.find({});
