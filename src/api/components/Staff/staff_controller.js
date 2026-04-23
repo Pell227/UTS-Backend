@@ -1,42 +1,32 @@
-const Staff = require("./staff_service");
+const StaffService = require("./staff_service");
+const logger = require("../utils/logger");
 const { errorTypes, errorResponder } = require("../../../core/error");
 
 const getAllStaff = async (req, res, next) => {
   try {
-    const staff = await Staff.find();
-    res.status(200).json({
-      success: true,
-      data: staff,
-    });
+    const staff = await StaffService.getAllStaff();
+    res.status(200).json({ success: true, data: staff });
   } catch (error) {
     return next(errorResponder(errorTypes.SERVER, error.message));
   }
 };
 
-// GET BY ID
 const getStaffById = async (req, res, next) => {
   try {
-    const staff = await Staff.findById(req.params.id);
+    const staff = await StaffService.getStaffById(req.params.id);
 
     if (!staff) {
       return next(errorResponder(errorTypes.NOT_FOUND, "Staff not found"));
     }
-
-    res.status(200).json({
-      success: true,
-      data: staff,
-    });
+    res.status(200).json({ success: true, data: staff });
   } catch (error) {
     return next(errorResponder(errorTypes.SERVER, error.message));
   }
 };
 
-// CREATE
 const createStaff = async (req, res, next) => {
   try {
-    const { NIP, names, position, email, phone } = req.body;
-    const newStaff = await staff.save();
-
+    const newStaff = await StaffService.createstaff(req.body);
     res.status(201).json({
       success: true,
       message: "Staff berhasil dibuat",
@@ -47,17 +37,13 @@ const createStaff = async (req, res, next) => {
   }
 };
 
-// UPDATE
 const updateStaff = async (req, res, next) => {
   try {
-    const staff = await Staff.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const staff = await StaffService.updatestaff(req.params.id, req.body);
 
     if (!staff) {
       return next(errorResponder(errorTypes.NOT_FOUND, "Staff not found"));
     }
-
     res.status(200).json({
       success: true,
       message: "Staff berhasil diupdate",
@@ -68,19 +54,14 @@ const updateStaff = async (req, res, next) => {
   }
 };
 
-// DELETE
 const deleteStaff = async (req, res, next) => {
   try {
-    const staff = await Staff.findByIdAndDelete(req.params.id);
+    const staff = await StaffService.deletestaff(req.params.id);
 
     if (!staff) {
       return next(errorResponder(errorTypes.NOT_FOUND, "Staff not found"));
     }
-
-    res.status(200).json({
-      success: true,
-      message: "Staff deleted",
-    });
+    res.status(200).json({ success: true, message: "Staff deleted" });
   } catch (error) {
     return next(errorResponder(errorTypes.SERVER, error.message));
   }

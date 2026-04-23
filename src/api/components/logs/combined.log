@@ -1,0 +1,55 @@
+2026-04-23 11:36:48 [error]: [object Object]
+2026-04-23 11:37:15 [error]: TypeError: staffrepository.createReport is not a function
+    at Object.createstaff (C:\Users\felisia\UTS-Backend\src\api\components\Staff\staff_service.js:12:32)
+    at createStaff (C:\Users\felisia\UTS-Backend\src\api\components\Staff\staff_controller.js:40:34)
+    at Layer.handleRequest (C:\Users\felisia\UTS-Backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\felisia\UTS-Backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\felisia\UTS-Backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\felisia\UTS-Backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\felisia\UTS-Backend\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\felisia\UTS-Backend\node_modules\router\index.js:295:15
+    at processParams (C:\Users\felisia\UTS-Backend\node_modules\router\index.js:582:12)
+    at next (C:\Users\felisia\UTS-Backend\node_modules\router\index.js:291:5)
+2026-04-23 11:37:15 [error]: [object Object]
+2026-04-23 11:42:27 [error]: [object Object]
+2026-04-23 11:42:39 [error]: [object Object]
+2026-04-23 11:44:21 [error]: TypeError: Cannot read properties of undefined (reading 'create')
+    at Object.createStaff (C:\Users\felisia\UTS-Backend\src\api\components\Staff\staff_repository.js:12:16)
+    at Object.createstaff (C:\Users\felisia\UTS-Backend\src\api\components\Staff\staff_service.js:12:32)
+    at createStaff (C:\Users\felisia\UTS-Backend\src\api\components\Staff\staff_controller.js:40:34)
+    at Layer.handleRequest (C:\Users\felisia\UTS-Backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\felisia\UTS-Backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\felisia\UTS-Backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\felisia\UTS-Backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\felisia\UTS-Backend\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\felisia\UTS-Backend\node_modules\router\index.js:295:15
+    at processParams (C:\Users\felisia\UTS-Backend\node_modules\router\index.js:582:12)
+2026-04-23 11:44:21 [error]: [object Object]
+2026-04-23 11:50:27 [error]: TypeError: Cannot read properties of undefined (reading 'create')
+    at Object.createStaff (C:\Users\felisia\UTS-Backend\src\api\components\Staff\staff_repository.js:12:16)
+    at Object.createstaff (C:\Users\felisia\UTS-Backend\src\api\components\Staff\staff_service.js:12:32)
+    at createStaff (C:\Users\felisia\UTS-Backend\src\api\components\Staff\staff_controller.js:40:34)
+    at Layer.handleRequest (C:\Users\felisia\UTS-Backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\felisia\UTS-Backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\felisia\UTS-Backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\felisia\UTS-Backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\felisia\UTS-Backend\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\felisia\UTS-Backend\node_modules\router\index.js:295:15
+    at processParams (C:\Users\felisia\UTS-Backend\node_modules\router\index.js:582:12)
+2026-04-23 11:50:27 [error]: [object Object]
+2026-04-23 11:51:05 [error]: [object Object]
+2026-04-23 11:58:09 [error]: [object Object]
+2026-04-23 11:59:56 [error]: [object Object]
+2026-04-23 12:07:00 [error]: [object Object]
+2026-04-23 12:08:42 [error]: [object Object]
+2026-04-23 12:48:16 [error]: [object Object]
+2026-04-23 15:27:40 [error]: [object Object]
+2026-04-23 15:28:07 [error]: [object Object]
+2026-04-23 15:30:00 [error]: [object Object]
+2026-04-23 15:35:33 [error]: [object Object]
+2026-04-23 15:40:16 [error]: [object Object]
+2026-04-23 16:23:26 [error]: [object Object]
+2026-04-23 16:23:39 [error]: [object Object]
+2026-04-23 16:24:03 [error]: [object Object]
+2026-04-23 16:29:00 [error]: [object Object]
+2026-04-23 16:29:25 [error]: [object Object]

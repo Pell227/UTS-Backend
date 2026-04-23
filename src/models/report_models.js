@@ -1,14 +1,9 @@
-module.exports = (db) => {
-  const report = db.define("report", {
-    idreport: {
-      type: Number(20),
-      primaryKey: true,
-      autoIncrement: true,
-      require: true,
-    },
+const mongoose = require("mongoose");
 
+const report = new mongoose.Schema(
+  {
     title: {
-      type: String(50),
+      type: String,
       require: true,
     },
 
@@ -21,5 +16,9 @@ module.exports = (db) => {
       type: Date,
       require: true,
     },
-  });
-};
+  },
+  { timestamps: true },
+);
+const reports = mongoose.model("Report", report);
+
+module.exports = { reports };

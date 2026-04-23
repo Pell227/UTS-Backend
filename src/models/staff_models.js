@@ -1,32 +1,33 @@
-module.exports = (db) => {
-  const Staff = db.define("staff", {
+const mongoose = require("mongoose");
+
+const staffSchema = new mongoose.Schema(
+  {
     NIP: {
-      type: Number(20),
-      primaryKey: true,
-      autoIncrement: true,
-      require: true,
-    },
-
-    names: {
-      type: String(50),
-      require: true,
-    },
-
-    position: {
-      type: String(30),
-      require: true,
-    },
-
-    email: {
-      type: String(50),
-      require: true,
+      type: Number,
+      required: true,
       unique: true,
     },
-
-    phone: {
-      type: Number(15),
-      require: true,
+    names: {
+      type: String,
+      required: true,
     },
-  });
-  return Staff;
-};
+    position: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    phone: {
+      type: Number,
+      required: true,
+    },
+  },
+  { timestamps: true },
+);
+
+const Staff = mongoose.model("Staff", staffSchema);
+
+module.exports = { Staff };

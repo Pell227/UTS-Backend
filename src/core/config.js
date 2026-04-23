@@ -6,7 +6,7 @@ process.env.NODE_ENV = (
 
 const envFound = dotenv.config({ path: ".env" });
 if (envFound.error) {
-  throw new Error("File '.env' not found!");
+  console.warn("File '.env' not found!");
 }
 
 module.exports = {
