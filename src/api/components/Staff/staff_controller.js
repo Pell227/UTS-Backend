@@ -1,13 +1,12 @@
-const Staff = require("./staff_model");
+const Staff = require("./staff_service");
 const { errorTypes, errorResponder } = require("../../../core/error");
 
-// GET ALL
 const getAllStaff = async (req, res, next) => {
   try {
     const staff = await Staff.find();
     res.status(200).json({
       success: true,
-      data: staff
+      data: staff,
     });
   } catch (error) {
     return next(errorResponder(errorTypes.SERVER, error.message));
@@ -25,7 +24,7 @@ const getStaffById = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      data: staff
+      data: staff,
     });
   } catch (error) {
     return next(errorResponder(errorTypes.SERVER, error.message));
@@ -35,13 +34,13 @@ const getStaffById = async (req, res, next) => {
 // CREATE
 const createStaff = async (req, res, next) => {
   try {
-    const staff = new Staff(req.body);
+    const { NIP, names, position, email, phone } = req.body;
     const newStaff = await staff.save();
 
     res.status(201).json({
       success: true,
       message: "Staff berhasil dibuat",
-      data: newStaff
+      data: newStaff,
     });
   } catch (error) {
     return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
@@ -51,11 +50,9 @@ const createStaff = async (req, res, next) => {
 // UPDATE
 const updateStaff = async (req, res, next) => {
   try {
-    const staff = await Staff.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
+    const staff = await Staff.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
 
     if (!staff) {
       return next(errorResponder(errorTypes.NOT_FOUND, "Staff not found"));
@@ -64,7 +61,7 @@ const updateStaff = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Staff berhasil diupdate",
-      data: staff
+      data: staff,
     });
   } catch (error) {
     return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
@@ -82,7 +79,7 @@ const deleteStaff = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "Staff deleted"
+      message: "Staff deleted",
     });
   } catch (error) {
     return next(errorResponder(errorTypes.SERVER, error.message));
