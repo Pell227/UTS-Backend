@@ -1,51 +1,91 @@
-const staffservice = require("./staff_service");
-const staffroutes = require("./staff_routes");
-const getAllStaff = async (req, res) => {
+const Staff = require("./staff_model");
+const { errorTypes, errorResponder } = require("../../../core/error");
+
+// GET ALL
+const getAllStaff = async (req, res, next) => {
   try {
     const staff = await Staff.find();
-    res.status(200).json(staff);
+    res.status(200).json({
+      success: true,
+      data: staff
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 };
 
-const getStaffById = async (req, res) => {
+// GET BY ID
+const getStaffById = async (req, res, next) => {
   try {
     const staff = await Staff.findById(req.params.id);
-    if (!staff) return res.status(404).json({ message: "Staff not found" });
-    res.status(200).json(staff);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
 
-const createStaff = async (req, res) => {
-  const staff = new Staff(req.body);
-  try {
-    const newStaff = await staff.save();
-    res.status(201).json(newStaff);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+    if (!staff) {
+      return next(errorResponder(errorTypes.NOT_FOUND, "Staff not found"));
+    }
 
-const updateStaff = async (req, res) => {
-  try {
-    const staff = await Staff.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+    res.status(200).json({
+      success: true,
+      data: staff
     });
-    res.status(200).json(staff);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 };
 
-const deleteStaff = async (req, res) => {
+// CREATE
+const createStaff = async (req, res, next) => {
   try {
-    await Staff.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: "Staff deleted" });
+    const staff = new Staff(req.body);
+    const newStaff = await staff.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Staff berhasil dibuat",
+      data: newStaff
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
+  }
+};
+
+// UPDATE
+const updateStaff = async (req, res, next) => {
+  try {
+    const staff = await Staff.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    if (!staff) {
+      return next(errorResponder(errorTypes.NOT_FOUND, "Staff not found"));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Staff berhasil diupdate",
+      data: staff
+    });
+  } catch (error) {
+    return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
+  }
+};
+
+// DELETE
+const deleteStaff = async (req, res, next) => {
+  try {
+    const staff = await Staff.findByIdAndDelete(req.params.id);
+
+    if (!staff) {
+      return next(errorResponder(errorTypes.NOT_FOUND, "Staff not found"));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Staff deleted"
+    });
+  } catch (error) {
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 };
 
