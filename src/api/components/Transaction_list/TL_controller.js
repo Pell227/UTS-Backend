@@ -1,47 +1,101 @@
-const TLservice = require('./TL_service')
+const TLservice = require('./TL_service');
+const { errorTypes, errorResponder } = require("../../../core/error");
 
-const createList = async (req, res) => {
+// CREATE
+const createList = async (req, res, next) => {
     try {
         const list = await TLservice.createlist(req.body);
-        res.status(201).json(list);
+
+        res.status(201).json({
+            success: true,
+            data: list
+        });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        return next(
+            errorResponder(errorTypes.BAD_REQUEST, error.message)
+        );
     }
 };
 
-const getAllList = async (req, res) => {
+// GET ALL
+const getAllList = async (req, res, next) => {
     try {
         const lists = await TLservice.getAllList(req.query);
-        res.status(200).json(lists);
+
+        res.status(200).json({
+            success: true,
+            data: lists
+        });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        return next(
+            errorResponder(errorTypes.SERVER, error.message)
+        );
     }
 };
 
-const getListById = async (req, res) => {
+// GET BY ID
+const getListById = async (req, res, next) => {
     try {
         const list = await TLservice.getListById(req.params.id);
-        res.status(200).json(list);
+
+        if (!list) {
+            return next(
+                errorResponder(errorTypes.NOT_FOUND, "Transaction list not found")
+            );
+        }
+
+        res.status(200).json({
+            success: true,
+            data: list
+        });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        return next(
+            errorResponder(errorTypes.SERVER, error.message)
+        );
     }
 };
 
-const updateList = async (req, res) => {
+// UPDATE
+const updateList = async (req, res, next) => {
     try {
         const updatedList = await TLservice.updateList(req.params.id, req.body);
-        res.status(200).json(updatedList);
+
+        if (!updatedList) {
+            return next(
+                errorResponder(errorTypes.NOT_FOUND, "Transaction list not found")
+            );
+        }
+
+        res.status(200).json({
+            success: true,
+            data: updatedList
+        });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        return next(
+            errorResponder(errorTypes.BAD_REQUEST, error.message)
+        );
     }
 };
 
-const deleteList = async (req, res) => {
+// DELETE
+const deleteList = async (req, res, next) => {
     try {
-        await TLservice.deleteList(req.params.id);
-        res.status(200).json({ message: "Transaction list deleted" });
+        const deleted = await TLservice.deleteList(req.params.id);
+
+        if (!deleted) {
+            return next(
+                errorResponder(errorTypes.NOT_FOUND, "Transaction list not found")
+            );
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Transaction list deleted"
+        });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        return next(
+            errorResponder(errorTypes.SERVER, error.message)
+        );
     }
 };
 

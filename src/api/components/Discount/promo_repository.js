@@ -1,4 +1,4 @@
-const { promo } = require("../models");
+const { promo } = require("../../../models/discount_model");
 
 // GET ALL
 async function getPromos() {
@@ -31,5 +31,5 @@ module.exports = {
   getPromoById,
   createPromo,
   updatePromo,
-  deletePromo
+  deletePromo,
 };

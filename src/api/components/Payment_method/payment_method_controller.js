@@ -1,84 +1,93 @@
-const service = require("../../payment_method/payment_method_service");
+const service = require("./payment_method_service");
+const { errorTypes, errorResponder } = require("../../../core/error");
 
 // GET ALL + FILTER
-const getAllPaymentMethods = async (req, res) => {
+const getAllPaymentMethods = async (req, res, next) => {
   try {
     const data = await service.getPaymentMethods(req.query);
     res.json(data);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 };
 
 // GET BY ID
-const getPaymentMethodById = async (req, res) => {
+const getPaymentMethodById = async (req, res, next) => {
   try {
     const data = await service.getPaymentMethodById(req.params.id);
 
     if (!data) {
-      return res.status(404).json({ message: "Data not found" });
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Payment method not found"),
+      );
     }
 
     res.json(data);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 };
 
 // CREATE
-const createPaymentMethod = async (req, res) => {
+const createPaymentMethod = async (req, res, next) => {
   try {
     const data = await service.createPaymentMethod(req.body);
     res.status(201).json(data);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
   }
 };
 
 // UPDATE
-const updatePaymentMethod = async (req, res) => {
+const updatePaymentMethod = async (req, res, next) => {
   try {
     const data = await service.updatePaymentMethod(req.params.id, req.body);
 
     if (!data) {
-      return res.status(404).json({ message: "Data not found" });
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Payment method not found"),
+      );
     }
 
     res.json(data);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
   }
 };
 
 // DELETE
-const deletePaymentMethod = async (req, res) => {
+const deletePaymentMethod = async (req, res, next) => {
   try {
     const data = await service.deletePaymentMethod(req.params.id);
 
     if (!data) {
-      return res.status(404).json({ message: "Data not found" });
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Payment method not found"),
+      );
     }
 
-    res.json({ message: "Deleted successfully" });
+    res.json({ message: "Payment method deleted" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 };
 
-// PATCH STATUS
-const updateStatus = async (req, res) => {
+// UPDATE STATUS
+const updateStatus = async (req, res, next) => {
   try {
     const { isActive } = req.body;
 
     const data = await service.updateStatus(req.params.id, isActive);
 
     if (!data) {
-      return res.status(404).json({ message: "Data not found" });
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Payment method not found"),
+      );
     }
 
     res.json(data);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
   }
 };
 
@@ -88,5 +97,5 @@ module.exports = {
   createPaymentMethod,
   updatePaymentMethod,
   deletePaymentMethod,
-  updateStatus
+  updateStatus,
 };

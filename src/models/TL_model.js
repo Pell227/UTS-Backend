@@ -1,53 +1,51 @@
 module.exports = (db) => {
-    const TL = db.define("transaction_list", {
-        transaction_id: {
-            type: String,
-            required: true,
-            primaryKey: true
-        },
+  const TL = db.define("transaction_list", {
+    transaction_id: {
+      type: String,
+      required: true,
+      primaryKey: true,
+    },
 
-        receipt_id: {
-            type: Number,
-            required: true,
-            unique: true
-        },
+    receipt_id: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
 
-        cashier_id: {
-            type: String,
-            required: true,
-            unique: true
-        },
+    cashier_id: {
+      type: String,
+      required: true,
+      unique: true,
+    },
 
-        cashier_name: {
-            type: String,
-            required: true
-        },
+    cashier_name: {
+      type: String,
+      required: true,
+    },
 
-        cashier_station: {
-            type: Number,
-            required: true
-        },
+    cashier_station: {
+      type: Number,
+      required: true,
+    },
 
-        store_id: {
-            type: String,
-            required: true
-        },
+    store_id: {
+      type: String,
+      required: true,
+    },
 
-        description: {
-            type: String,
-        },
+    description: {
+      type: String,
+    },
 
-        // berapa banyak transaksi yang terjadi
-        quantity: { 
-            type: Number,
-            required: true
-        },
+    quantity: {
+      type: Number,
+      required: true,
+    },
 
-        // jumlah total pendapatan
-        total: {
-            type: Number,
-            required: true
-        }
-    });
-    return TL;
-}
+    total: {
+      type: Number,
+      required: true,
+    },
+  });
+  return TL;
+};

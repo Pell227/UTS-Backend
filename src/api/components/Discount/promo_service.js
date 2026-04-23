@@ -1,4 +1,4 @@
-const repo = require("../repository/discount_repository");
+const repo = require("./promo_repository");
 
 // GET ALL
 const getPromos = async () => {
@@ -31,10 +31,10 @@ const deletePromo = async (id) => {
   return await repo.deletePromo(id);
 };
 
-// 🔥 APPLY PROMO (logic utama di sini)
+// APPLY PROMO (logic utama di sini)
 const applyPromo = async (code, amount) => {
   const promos = await repo.getPromos();
-  const promo = promos.find(p => p.code === code && p.isActive);
+  const promo = promos.find((p) => p.code === code && p.isActive);
 
   if (!promo) {
     throw new Error("Promo tidak valid");
@@ -56,7 +56,7 @@ const applyPromo = async (code, amount) => {
 
   return {
     discountAmount,
-    finalPrice
+    finalPrice,
   };
 };
 
@@ -66,5 +66,5 @@ module.exports = {
   createPromo,
   updatePromo,
   deletePromo,
-  applyPromo
+  applyPromo,
 };

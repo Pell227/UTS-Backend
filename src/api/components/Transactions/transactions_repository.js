@@ -1,4 +1,4 @@
-const { transactions } = require("../../../../models/transactions_models");
+const { transactions } = require("../../../models/transactions_models");
 
 async function createOrder(id) {
     return transactions.create({ order_id: id });

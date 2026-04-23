@@ -1,65 +1,87 @@
 const supplierService = require("./supplier_service");
+const { errorTypes, errorResponder } = require("../../../core/error");
 
-async function getAllSuppliers(req, res) {
+// GET ALL
+async function getAllSuppliers(req, res, next) {
   try {
     const suppliers = await supplierService.getSuppliers();
     res.json(suppliers);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return next(
+      errorResponder(errorTypes.SERVER, error.message)
+    );
   }
 }
 
-async function getSupplierById(req, res) {
+// GET BY ID
+async function getSupplierById(req, res, next) {
   try {
     const supplier = await supplierService.getSupplierById(req.params.id);
 
     if (!supplier) {
-      return res.status(404).json({ error: "Supplier not found" });
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Supplier not found")
+      );
     }
 
     res.json(supplier);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return next(
+      errorResponder(errorTypes.SERVER, error.message)
+    );
   }
 }
 
-async function createSupplier(req, res) {
+// CREATE
+async function createSupplier(req, res, next) {
   try {
     const newSupplier = await supplierService.createSupplier(req.body);
     res.status(201).json(newSupplier);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return next(
+      errorResponder(errorTypes.BAD_REQUEST, error.message)
+    );
   }
 }
 
-async function updateSupplier(req, res) {
+// UPDATE
+async function updateSupplier(req, res, next) {
   try {
     const updatedSupplier = await supplierService.updateSupplier(
       req.params.id,
-      req.body,
+      req.body
     );
 
     if (!updatedSupplier) {
-      return res.status(404).json({ error: "Supplier not found" });
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Supplier not found")
+      );
     }
 
     res.json(updatedSupplier);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return next(
+      errorResponder(errorTypes.BAD_REQUEST, error.message)
+    );
   }
 }
 
-async function deleteSupplier(req, res) {
+// DELETE
+async function deleteSupplier(req, res, next) {
   try {
     const deletedSupplier = await supplierService.deleteSupplier(req.params.id);
 
     if (!deletedSupplier) {
-      return res.status(404).json({ error: "Supplier not found" });
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Supplier not found")
+      );
     }
 
     res.json({ message: "Supplier deleted successfully" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return next(
+      errorResponder(errorTypes.SERVER, error.message)
+    );
   }
 }
 
