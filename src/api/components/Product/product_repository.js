@@ -1,43 +1,24 @@
 const { product } = require("../../../models/product_models");
 
 async function getProducts() {
-  return product.findAll();
+    return product.find({});
 }
 
 async function getProductById(id) {
-  return product.findByPk(id);
+    return product.findById(id);
 }
 
 async function createProduct(data) {
-  return product.create(data);
+    const newProduct = new product(data);
+    return await newProduct.save();
 }
 
 async function updateProduct(id, data) {
-  const existingProduct = await product.findByPk(id);
-
-  if (!existingProduct) {
-    return null;
-  }
-
-  await existingProduct.update(data);
-  return existingProduct;
+    return product.findByIdAndUpdate(id, data, { new: true });
 }
 
 async function deleteProduct(id) {
-  const existingProduct = await product.findByPk(id);
-
-  if (!existingProduct) {
-    return null;
-  }
-
-  await existingProduct.destroy();
-  return existingProduct;
+    return product.findByIdAndDelete(id);
 }
 
-module.exports = {
-  getProducts,
-  getProductById,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-};
+module.exports = { getProducts, getProductById, createProduct, updateProduct, deleteProduct };

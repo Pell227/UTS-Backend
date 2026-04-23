@@ -1,36 +1,13 @@
-module.exports = (db) => {
-  const product = db.define("product", {
-    idproduct: {
-      type: Number,
-      primaryKey: true,
-      autoIncrement: true,
-      require: true,
-    },
+const mongoose = require("mongoose");
 
-    name: {
-      type: String,
-      require: true,
-    },
+const productSchema = new mongoose.Schema({
+    name:        { type: String, required: true },
+    description: { type: String },
+    price:       { type: Number, required: true },
+    stock:       { type: Number, default: 0 },
+    isActive:    { type: Boolean, default: true },
+}, { timestamps: true });
 
-    description: {
-      type: String,
-    },
+const product = mongoose.model("Product", productSchema);
 
-    price: {
-      type: Number,
-      require: true,
-    },
-
-    stock: {
-      type: Number,
-      default: 0,
-    },
-
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-  });
-
-  return product;
-};
+module.exports = { product };
