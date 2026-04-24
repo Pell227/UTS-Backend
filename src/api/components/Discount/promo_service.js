@@ -1,5 +1,32 @@
 const repo = require("./promo_repository");
 
+const applyPromo = async (code, amount) => {
+  const promos = await repo.getPromos();
+  const promo = promos.find((p) => p.code === code && p.isActive);
+
+  if (!promo) {
+    throw new Error("Promo tidak valid");
+  }
+
+  let discountAmount = 0;
+
+  if (promo.type === "percentage") {
+    discountAmount = (promo.discount / 100) * amount;
+
+    if (promo.maxDiscount) {
+      discountAmount = Math.min(discountAmount, promo.maxDiscount);
+    }
+  } else {
+    discountAmount = promo.discount;
+  }
+
+  const finalPrice = amount - discountAmount;
+
+  return {
+    discountAmount,
+    finalPrice,
+  };
+};
 // GET ALL
 const getPromos = async () => {
   return await repo.getPromos();
@@ -29,35 +56,6 @@ const updatePromo = async (id, data) => {
 // DELETE
 const deletePromo = async (id) => {
   return await repo.deletePromo(id);
-};
-
-// APPLY PROMO (logic utama di sini)
-const applyPromo = async (code, amount) => {
-  const promos = await repo.getPromos();
-  const promo = promos.find((p) => p.code === code && p.isActive);
-
-  if (!promo) {
-    throw new Error("Promo tidak valid");
-  }
-
-  let discountAmount = 0;
-
-  if (promo.type === "percentage") {
-    discountAmount = (promo.discount / 100) * amount;
-
-    if (promo.maxDiscount) {
-      discountAmount = Math.min(discountAmount, promo.maxDiscount);
-    }
-  } else {
-    discountAmount = promo.discount;
-  }
-
-  const finalPrice = amount - discountAmount;
-
-  return {
-    discountAmount,
-    finalPrice,
-  };
 };
 
 module.exports = {

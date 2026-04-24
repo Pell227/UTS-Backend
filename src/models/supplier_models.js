@@ -1,38 +1,16 @@
-module.exports = (db) => {
-  const supplier = db.define("supplier", {
-    idsupplier: {
-      type: Number,
-      primaryKey: true,
-      autoIncrement: true,
-      require: true,
-    },
+const mongoose = require("mongoose");
 
-    no: {
-      type: String,
-      require: true,
-      unique: true,
-    },
+const supplierSchema = new mongoose.Schema(
+  {
+    no: { type: String, required: true, unique: true },
+    nama_supplier: { type: String, required: true },
+    alamat: { type: String, required: true },
+    telepon: { type: String, required: true },
+    isActive: { type: Boolean, default: true },
+  },
+  { timestamps: true },
+);
 
-    nama_supplier: {
-      type: String,
-      require: true,
-    },
+const supplier = mongoose.model("Supplier", supplierSchema);
 
-    alamat: {
-      type: String,
-      require: true,
-    },
-
-    telepon: {
-      type: String,
-      require: true,
-    },
-
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-  });
-
-  return supplier;
-};
+module.exports = { supplier };

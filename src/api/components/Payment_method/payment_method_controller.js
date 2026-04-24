@@ -34,7 +34,12 @@ const createPaymentMethod = async (req, res, next) => {
     const data = await service.createPaymentMethod(req.body);
     res.status(201).json(data);
   } catch (error) {
-    return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
+    // Fix: distinguish validation errors from server errors
+    const type =
+      error.name === "ValidationError"
+        ? errorTypes.BAD_REQUEST
+        : errorTypes.SERVER;
+    return next(errorResponder(type, error.message));
   }
 };
 
@@ -76,6 +81,13 @@ const deletePaymentMethod = async (req, res, next) => {
 const updateStatus = async (req, res, next) => {
   try {
     const { isActive } = req.body;
+
+    // Fix: validate isActive is a boolean before proceeding
+    if (typeof isActive !== "boolean") {
+      return next(
+        errorResponder(errorTypes.BAD_REQUEST, "isActive must be a boolean"),
+      );
+    }
 
     const data = await service.updateStatus(req.params.id, isActive);
 

@@ -4,7 +4,7 @@ const controller = require("./payment_method_controller");
 const router = express.Router();
 
 module.exports = (app) => {
-  app.use("/api/payment-methods", router);
+  app.use("/api/payment", router);
 
   router.get("/", controller.getAllPaymentMethods);
   router.get("/:id", controller.getPaymentMethodById);

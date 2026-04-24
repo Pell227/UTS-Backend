@@ -7,7 +7,7 @@ const createTransaction = async (req, res, next) => {
     const transaction = await transactionsservice.createTransaction(req.body);
     res.status(201).json({
       success: true,
-      data: transaction
+      data: transaction,
     });
   } catch (error) {
     return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
@@ -20,7 +20,7 @@ const getAllTransactions = async (req, res, next) => {
     const transactions = await transactionsservice.getAllTransactions();
     res.status(200).json({
       success: true,
-      data: transactions
+      data: transactions,
     });
   } catch (error) {
     return next(errorResponder(errorTypes.SERVER, error.message));
@@ -30,15 +30,19 @@ const getAllTransactions = async (req, res, next) => {
 // GET BY ID
 const getTransactionById = async (req, res, next) => {
   try {
-    const transaction = await transactionsservice.getTransactionById(req.params.id);
+    const transaction = await transactionsservice.getTransactionById(
+      req.params.id,
+    );
 
     if (!transaction) {
-      return next(errorResponder(errorTypes.NOT_FOUND, "Transaction not found"));
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Transaction not found"),
+      );
     }
 
     res.status(200).json({
       success: true,
-      data: transaction
+      data: transaction,
     });
   } catch (error) {
     return next(errorResponder(errorTypes.SERVER, error.message));
@@ -50,17 +54,19 @@ const updateTransaction = async (req, res, next) => {
   try {
     const transaction = await transactionsservice.updateTransaction(
       req.params.id,
-      req.body
+      req.body,
     );
 
     if (!transaction) {
-      return next(errorResponder(errorTypes.NOT_FOUND, "Transaction not found"));
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Transaction not found"),
+      );
     }
 
     res.status(200).json({
       success: true,
       message: "Transaction updated",
-      data: transaction
+      data: transaction,
     });
   } catch (error) {
     return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
@@ -70,15 +76,19 @@ const updateTransaction = async (req, res, next) => {
 // DELETE
 const deleteTransaction = async (req, res, next) => {
   try {
-    const transaction = await transactionsservice.deleteTransaction(req.params.id);
+    const transaction = await transactionsservice.deleteTransaction(
+      req.params.id,
+    );
 
     if (!transaction) {
-      return next(errorResponder(errorTypes.NOT_FOUND, "Transaction not found"));
+      return next(
+        errorResponder(errorTypes.NOT_FOUND, "Transaction not found"),
+      );
     }
 
     res.status(200).json({
       success: true,
-      message: "Transaction deleted"
+      message: "Transaction deleted",
     });
   } catch (error) {
     return next(errorResponder(errorTypes.SERVER, error.message));

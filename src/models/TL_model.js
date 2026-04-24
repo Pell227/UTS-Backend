@@ -1,51 +1,20 @@
-module.exports = (db) => {
-  const TL = db.define("transaction_list", {
-    transaction_id: {
-      type: String,
-      required: true,
-      primaryKey: true,
-    },
+const mongoose = require("mongoose");
 
-    receipt_id: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
+const TLSchema = new mongoose.Schema(
+  {
+    transaction_id: { type: String, required: true },
+    receipt_id: { type: Number, required: true, unique: true },
+    cashier_id: { type: String, required: true },
+    cashier_name: { type: String, required: true },
+    cashier_station: { type: Number, required: true },
+    store_id: { type: String, required: true },
+    description: { type: String },
+    quantity: { type: Number, required: true },
+    total: { type: Number, required: true },
+  },
+  { timestamps: true },
+);
 
-    cashier_id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
+const TL = mongoose.model("TransactionList", TLSchema);
 
-    cashier_name: {
-      type: String,
-      required: true,
-    },
-
-    cashier_station: {
-      type: Number,
-      required: true,
-    },
-
-    store_id: {
-      type: String,
-      required: true,
-    },
-
-    description: {
-      type: String,
-    },
-
-    quantity: {
-      type: Number,
-      required: true,
-    },
-
-    total: {
-      type: Number,
-      required: true,
-    },
-  });
-  return TL;
-};
+module.exports = { TL };

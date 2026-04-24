@@ -1,23 +1,23 @@
-const { report } = require("../../../models/report_models");
+const { reports } = require("../../../models/report_models");
 
 async function getReports() {
-  return report.find({});
+  return reports.find({});
 }
 
 async function getReportById(id) {
-  return report.findById(id);
+  return reports.findById(id);
 }
 
 async function createReport(data) {
-  return report.create(data);
+  return reports.create(data);
 }
 
 async function updateReport(id, data) {
-  return report.findByIdAndUpdate(id, data, { new: true });
+  return reports.findByIdAndUpdate(id, data, { new: true });
 }
 
 async function deleteReport(id) {
-  return report.findByIdAndDelete(id);
+  return reports.findByIdAndDelete(id);
 }
 
 module.exports = {

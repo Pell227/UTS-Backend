@@ -1,26 +1,15 @@
-module.exports = (db) => {
-  const PaymentMethod = db.define("payment_method", {
-    
-    name_pm : {
-      type : String,
-      require : true
-    },
+const mongoose = require("mongoose");
 
-    type_pm : {
-      type : String, // e-wallet, bank, cash
-      require : true
-    },
+const paymentMethodSchema = new mongoose.Schema(
+  {
+    name_pm: { type: String, required: true },
+    type_pm: { type: String, required: true },
+    provider_pm: { type: String },
+    isActive_pm: { type: Boolean, default: true },
+  },
+  { timestamps: true },
+);
 
-    provider_pm : {
-      type : String, // QRIS, Virtual Account, dll
-      require : false
-    },
+const payment_method = mongoose.model("PaymentMethod", paymentMethodSchema);
 
-    isActive_pm : {
-      type : Boolean,
-      default : true
-    }
-
-  });
-  return PaymentMethod;
-};
+module.exports = { payment_method };

@@ -4,17 +4,17 @@ const report = new mongoose.Schema(
   {
     title: {
       type: String,
-      require: true,
+      required: true,
     },
 
     start_date: {
       type: Date,
-      require: true,
+      required: true,
     },
 
     end_date: {
       type: Date,
-      require: true,
+      required: true,
     },
   },
   { timestamps: true },

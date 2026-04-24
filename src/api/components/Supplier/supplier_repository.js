@@ -1,37 +1,24 @@
 const { supplier } = require("../../../models/supplier_models");
 
 async function getSuppliers() {
-  return supplier.findAll();
+  return supplier.find({});
 }
 
 async function getSupplierById(id) {
-  return supplier.findByPk(id);
+  return supplier.findById(id);
 }
 
 async function createSupplier(data) {
-  return supplier.create(data);
+  const newSupplier = new supplier(data);
+  return await newSupplier.save();
 }
 
 async function updateSupplier(id, data) {
-  const existingSupplier = await supplier.findByPk(id);
-
-  if (!existingSupplier) {
-    return null;
-  }
-
-  await existingSupplier.update(data);
-  return existingSupplier;
+  return supplier.findByIdAndUpdate(id, data, { new: true });
 }
 
 async function deleteSupplier(id) {
-  const existingSupplier = await supplier.findByPk(id);
-
-  if (!existingSupplier) {
-    return null;
-  }
-
-  await existingSupplier.destroy();
-  return existingSupplier;
+  return supplier.findByIdAndDelete(id);
 }
 
 module.exports = {
