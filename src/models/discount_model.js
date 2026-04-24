@@ -1,25 +1,16 @@
-module.exports = (db) => {
-  const Promo = db.define("promo", {
-    code: {
-      type: String,
-      require: true,
-    },
-    discount: {
-      type: Number,
-      require: true,
-    },
-    type: {
-      type: String,
-      require: true,
-    },
-    maxDiscount: {
-      type: Number,
-      require: false,
-    },
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-  });
-  return Promo;
-};
+const mongoose = require("mongoose");
+
+const promoSchema = new mongoose.Schema(
+  {
+    code: { type: String, required: true, unique: true },
+    discount: { type: Number, required: true },
+    type: { type: String, required: true },
+    maxDiscount: { type: Number },
+    isActive: { type: Boolean, default: true },
+  },
+  { timestamps: true },
+);
+
+const promo = mongoose.model("Promo", promoSchema);
+
+module.exports = { promo };

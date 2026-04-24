@@ -1,33 +1,30 @@
-module.exports = (inventory) => {
-    const createInventory = async(data) => {
-        return await inventory.createInventory(data);
-    };
+const { Inventory } = require("../../../models/inventory_models");
 
-    const findAllInventory = async() => {
-        return await inventory.findAllInventory();
-    };
+async function createInventory(data) {
+  const newItem = new Inventory(data);
+  return await newItem.save();
+}
 
-    const findById = async(id) => {
-        return await inventory.findById(id);
-    };
+async function getAllInventory() {
+  return Inventory.find({});
+}
 
-    const updateInventory = async(id, data) => {
-        return await inventory.updateInventory(data, {
-            where: { InvenId: id }
-        });
-    };
+async function getInventoryById(id) {
+  return Inventory.findById(id);
+}
 
-    const removeInventory = async(id) => {
-        return await inventory.remove({
-            where: { InvenId: id }
-        });
-    };
+async function updateInventory(id, data) {
+  return Inventory.findByIdAndUpdate(id, data, { new: true });
+}
 
-    return {
-        createInventory,
-        findAllInventory,
-        findById,
-        updateInventory,
-        removeInventory
-    };
+async function deleteInventory(id) {
+  return Inventory.findByIdAndDelete(id);
+}
+
+module.exports = {
+  createInventory,
+  getAllInventory,
+  getInventoryById,
+  updateInventory,
+  deleteInventory,
 };

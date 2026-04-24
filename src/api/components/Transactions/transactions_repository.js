@@ -1,39 +1,30 @@
 const { transactions } = require("../../../models/transactions_models");
 
-async function createOrder(id) {
-    return transactions.create({ order_id: id });
+async function createTransaction(data) {
+  const t = new transactions(data);
+  return await t.save();
 }
 
 async function getTransactions(filter = {}, options = {}) {
-    return transactions.find(filter).limit(options.limit || 10);
+  return transactions.find(filter).limit(options.limit || 10);
 }
 
 async function getTransactionById(id) {
-    try {
-        const transaction = await transactions.findById(id);
-
-        if (!transaction) {
-            throw new Error("Transaction not found");
-        }
-
-        return transaction;
-    } catch (err) {
-        throw new Error("Failed to get transaction: " + err.message);
-    }
+  return transactions.findById(id);
 }
 
 async function updateTransaction(id, data) {
-    return transactions.findByIdAndUpdate(id, data, { new: true });
+  return transactions.findByIdAndUpdate(id, data, { new: true });
 }
 
 async function deleteTransaction(id) {
-    return transactions.findByIdAndDelete(id);
+  return transactions.findByIdAndDelete(id);
 }
 
 module.exports = {
-    createOrder,
-    getTransactions,
-    getTransactionById,
-    updateTransaction,
-    deleteTransaction
+  createTransaction,
+  getTransactions,
+  getTransactionById,
+  updateTransaction,
+  deleteTransaction,
 };

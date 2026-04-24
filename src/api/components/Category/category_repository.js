@@ -1,98 +1,48 @@
-module.exports = (db) => { 
-    const { category } = require('../models/category_models');
-    const Category = db.category;
-    const {Op} = db.Sequelize;
+const { category } = require("../../../models/category_models");
 
-    const createCategory = async (data) => {
-        try {
-            return await category.create({
-                id : data.id,
-                nameK : data.nameK,
-                description : data.description,
-                status : data.status,
+const createCategory = async (data) => {
+  const newCat = new category(data);
+  return await newCat.save();
+};
 
-            });     
-        } catch(error) {
-            throw error;
-        }
-    };
+const getAllCategories = async () => {
+  return await category.find({});
+};
 
-    const getAllCategories = async(data) => {
-        try {
-            return await category.findAll();
-        } catch(error) {
-            throw error;
-        }
-    };
+const getCategoryById = async (id) => {
+  return await category.findById(id);
+};
 
-    const getCategoryById = async(id) => {
-        try {
-            return await category.findByPk(id);
-        } catch(error) {
-            throw error;
-        }
-    };
+const updateCategory = async (id, data) => {
+  const existing = await category.findById(id);
+  if (!existing) return null;
+  return await category.findByIdAndUpdate(id, data, { new: true });
+};
 
-    const updateCategory = async (id, data) => {
-        try {
-            return await category.findByPk(id);
-            if(!category) return null;
+const deleteCategory = async (id) => {
+  const existing = await category.findById(id);
+  if (!existing) return null;
+  await category.findByIdAndDelete(id);
+  return true;
+};
 
-            return await category.update({
-                id : data.id,
-                nameK : data.nameK,
-                description : data.description,
-                status : data.status,
-            });
-        } catch(error) {
-            throw error;
-        }
-    };
+const getCategoryByName = async (keyword) => {
+  return await category.find({
+    nameK: { $regex: keyword || "", $options: "i" },
+  });
+};
 
-    const deleteCategory = async (id, data) => {
-        try {
-            return await category.findByPk(id);
-            if(!category) return null;
+const getCategoryBySorting = async (sortBy = "nameK", order = "ASC") => {
+  const sortOrder = order.toUpperCase() === "DESC" ? -1 : 1;
+  return await category.find({}).sort({ [sortBy]: sortOrder });
+};
 
-            await category.destroy();
-            return true;
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    const getCategoryByName = async (keyword) => {
-        try {
-            return await category.findAll({
-                where : {
-                    nameK : {
-                        [Op.like] : `%${keyword}%`, 
-                    },
-                },
-            });
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    const getCategoryBySorting = async (order = "ASC") => {
-        try {
-            return await category.findAll({
-                order : [['nameK', order]],
-            });
-        } catch(error) {
-            throw error;
-        }
-    };
-
-    return {
-        createCategory,
-        getAllCategories,
-        getCategoryById,
-        updateCategory,
-        deleteCategory,
-    //    Query
-        getCategoryByName,
-        getCategoryBySorting,
-    };
+module.exports = {
+  createCategory,
+  getAllCategories,
+  getCategoryById,
+  updateCategory,
+  deleteCategory,
+  getCategoryByName,
+  getCategoryBySorting,
 };

@@ -16,6 +16,10 @@ async function createPromo(data) {
   return await newData.save();
 }
 
+async function findPromoByCode(code) {
+  return promo.findOne({ code, isActive: true });
+}
+
 // UPDATE
 async function updatePromo(id, data) {
   return promo.findByIdAndUpdate(id, data, { new: true });
@@ -30,6 +34,7 @@ module.exports = {
   getPromos,
   getPromoById,
   createPromo,
+  findPromoByCode,
   updatePromo,
   deletePromo,
 };

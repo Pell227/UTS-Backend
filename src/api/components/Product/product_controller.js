@@ -7,9 +7,7 @@ async function getAllProducts(req, res, next) {
     const products = await productService.getProducts();
     res.json(products);
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.SERVER, error.message)
-    );
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 }
 
@@ -19,16 +17,12 @@ async function getProductById(req, res, next) {
     const product = await productService.getProductById(req.params.id);
 
     if (!product) {
-      return next(
-        errorResponder(errorTypes.NOT_FOUND, "Product not found")
-      );
+      return next(errorResponder(errorTypes.NOT_FOUND, "Product not found"));
     }
 
     res.json(product);
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.SERVER, error.message)
-    );
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 }
 
@@ -38,9 +32,7 @@ async function createProduct(req, res, next) {
     const newProduct = await productService.createProduct(req.body);
     res.status(201).json(newProduct);
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.BAD_REQUEST, error.message)
-    );
+    return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
   }
 }
 
@@ -49,20 +41,16 @@ async function updateProduct(req, res, next) {
   try {
     const updatedProduct = await productService.updateProduct(
       req.params.id,
-      req.body
+      req.body,
     );
 
     if (!updatedProduct) {
-      return next(
-        errorResponder(errorTypes.NOT_FOUND, "Product not found")
-      );
+      return next(errorResponder(errorTypes.NOT_FOUND, "Product not found"));
     }
 
     res.json(updatedProduct);
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.BAD_REQUEST, error.message)
-    );
+    return next(errorResponder(errorTypes.BAD_REQUEST, error.message));
   }
 }
 
@@ -72,16 +60,12 @@ async function deleteProduct(req, res, next) {
     const deletedProduct = await productService.deleteProduct(req.params.id);
 
     if (!deletedProduct) {
-      return next(
-        errorResponder(errorTypes.NOT_FOUND, "Product not found")
-      );
+      return next(errorResponder(errorTypes.NOT_FOUND, "Product not found"));
     }
 
     res.json({ message: "Product deleted successfully" });
   } catch (error) {
-    return next(
-      errorResponder(errorTypes.SERVER, error.message)
-    );
+    return next(errorResponder(errorTypes.SERVER, error.message));
   }
 }
 

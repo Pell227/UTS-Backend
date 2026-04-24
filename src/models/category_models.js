@@ -1,27 +1,14 @@
-module.exports = (db) => {
-  const Category = db.define("category", {
-    id: {
-      type: Number,
-      require: true,
-    },
-    nameK: {
-      type: String,
-      require: true,
-    },
-    description: {
-      type: String,
-      require: true,
-    },
-    status: {
-      type: String,
-      require: true,
-    },
-    product: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-      },
-    ],
-  });
-  return Category;
-};
+const mongoose = require("mongoose");
+
+const categorySchema = new mongoose.Schema(
+  {
+    nameK: { type: String, required: true },
+    description: { type: String, required: true },
+    status: { type: String, required: true, default: "active" },
+  },
+  { timestamps: true },
+);
+
+const category = mongoose.model("Category", categorySchema);
+
+module.exports = { category };

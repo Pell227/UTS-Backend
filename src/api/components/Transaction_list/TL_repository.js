@@ -1,25 +1,15 @@
 const { TL } = require("../../../models/TL_model");
 
 async function createList(data) {
-  return TL.create({ data });
+  return TL.create(data);
 }
 
 async function getList(filter = {}, options = {}) {
-  return TL.find(filter).limit(options.limit || 10);
+  return TL.find(filter).limit(options.limit || 100);
 }
 
 async function getListById(id) {
-  try {
-    const list = await TL.findById(id);
-
-    if (!list) {
-      throw new Error("Transaction list not found");
-    }
-
-    return list;
-  } catch (err) {
-    throw new Error("Failed to get transaction list: " + err.message);
-  }
+  return TL.findById(id);
 }
 
 async function updateList(id, data) {
